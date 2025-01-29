@@ -35,7 +35,7 @@ provided by this class in order to access and manipulate the following internal 
 - Whether or not the game has been drawn (all cells filled, but with no winner !)
 
 The 'Rendering Logic' has already been implemented for you: any changes to the state of the `OXOModel` will be automatically rendered by the `OXOView`. 
-Your main task is to implement the 'Event Handling Logic' in the `OXOCOntroller` class.
+Your main task is therefore to implement the 'Event Handling Logic' in the `OXOCOntroller` class.
 
 The code that you write must access and manipulate the state of the `OXOModel` by calling appropriate methods on it.
 Note that you will NOT need to interface directly with the `OXOView` class.
@@ -50,7 +50,7 @@ You should definitely NOT store any game state in your `OXOController` class - b
 
 
 **Hints & Tips:**  
-You may notice that some of the classes that we have provided in the template project implement the `Serializable` interface and many have a private attribute called `serialVersionUID`. GUI applications written in Java require classes to meet these requirements so that the application can be stored ('serialized') in certain situations. We won't be doing any serialization in this exercise, however we still need to implement the above features (otherwise we will get warnings when we try to compile the project).  
+You may notice that some of the classes that we have provided in the template project implement the `Serializable` interface and many have a private attribute called `serialVersionUID`. GUI applications written in Java require classes to meet these requirements so that the application can be stored ('serialized') in certain situations. We won't be doing any serialization in this exercise, however we still need to include the above features in the project template (otherwise we will get warnings when we try to compile the project).  
 
 
 # 
@@ -72,7 +72,7 @@ Once one player has entered a command and the board has been updated, play shoul
 Note that the order of play should be the same as the order that players were added to the model
 (i.e. the first player added to the game will take the first go, followed by the second etc.)
 
-When updating the game state, you should set the "current player" to be the player _whose turn it is next_.
+When updating the game state, you should set the 'current player' to be the player _whose turn it is next_.
 This is to ensure that the view shows graphically the player _who is about to take a turn_.
 
 It is possible that the user may make a mistake when interacting with the system and enter a "bad" cell identifier.
@@ -95,8 +95,8 @@ to the original settings.
  <a href='04%20Dynamic%20Board%20Size/slides/segment-1.pdf' target='_blank'> ![](../../resources/icons/slides.png) </a> <a href='04%20Dynamic%20Board%20Size/slides/segment-2.pdf' target='_blank'> ![](../../resources/icons/slides.png) </a> <a href='04%20Dynamic%20Board%20Size/video/segment-1.mp4' target='_blank'> ![](../../resources/icons/video.png) </a> <a href='04%20Dynamic%20Board%20Size/video/segment-2.mp4' target='_blank'> ![](../../resources/icons/video.png) </a> <a href='04%20Dynamic%20Board%20Size/deep/segment-1.pdf' target='_blank'> ![](../../resources/icons/deep.png) </a> <a href='04%20Dynamic%20Board%20Size/deep/segment-1.mp4' target='_blank'> ![](../../resources/icons/deep.png) </a>
 
 Currently the core data structure of the `OXOModel` class is a 2D array.
-This allows us to maintain a data representation of the current state of the board at any particular time.
-There is however a problem in that this constrains us to a particular board size (for example 3x3).
+This allows us to maintain a data representation of the current state of the game board.
+There is however a problem in that this constrains us to a particular board size (namely 3x3).
 It would be nice to be able to alter the size of the board _during_ a game !
 For example, if during a game it became clear that there was going to be a draw
 (with all cells being occupied, but with no clear winner)
@@ -111,9 +111,9 @@ and challenges involved in using them.
 These slides and videos cover a feature of Java called **Generics**. This mechanism allows us to designate a particular compound data structure to hold a specific object type. This allows us to make use of untyped data structures, whilst at the same time enforcing type checking at compile time.
 
 Using the knowledge you have gained from the above slides and videos, convert the board grid data structure contained in the `OXOModel` class from arrays into an
-<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/ArrayList.html" target="_blank">ArrayList</a> data structure.
+<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" target="_blank">ArrayList</a> data structure.
 
-In order to fully implement dynamic board size features, you will need to:
+In order to fully implement support for dynamic board sizes, you will need to:
 - Change your `cells` variable from a 2D array into some `ArrayList` elements
 - Alter the OXOModel constructor to initialise your `ArrayList` data structure
 - Update the cell owner "getter" and "setter" methods to operate on the `ArrayList` elements
@@ -130,7 +130,7 @@ that allow the user to change the size of the board during the game. If the user
 The minimum allowable board size is 3x3 and the maximum allowable board size 9x9 - your event handler should not allow the board size to change outside of this range. In addition to this, your game should not allow the board size to be reduced if the rows/columns being removed are not empty (i.e. don't allow reduction if it will remove previous moves).
 
 You should NOT alter the board size when the game is reset (i.e. when the `ESC` key is pressed).
-It is up the the players to choose the board size for the next game.  
+Keep the board size the same and leave it to the players to change the dimensions, if they wish.  
 
 
 # 
@@ -163,14 +163,14 @@ Note that if the players wish to play another game, they can reset the board in 
 
 
 The problem with manual testing is that it can be a very time consuming activity to undertake.
-Imagine trying to test the "draw" state for a 9x9 board - this would involve taking 100 separate turns to reach the end of the game.
+Imagine trying to test the 'draw' state for a 9x9 board - this would involve taking 81 separate turns to reach the end of the game.
 Now imagine having to test this draw state a number of times (maybe your code didn't work the first time you tried it -
 and you have to change your code and test it again). This would soon become very tedious !
 
 This is where automated testing can become invaluable - we can test the 'model' and 'controller' components of the system by replacing
-the graphical "view" with an automated test script. The game can then be extensively tested without having to click the mouse or press a key.
+the graphical 'view' with an automated test script. The game can then be extensively tested without having to click the mouse or press a key.
 
-We have provide a skeleton test script called `ExampleControllerTests` that can be found in the `src/test/java/edu/uob` folder.
+We have provided a skeleton test script called `ExampleControllerTests` that can be found in the `src/test/java/edu/uob` folder.
 You will notice that the file has only a couple of test methods in it.
 You should populate this test script with a comprehensive set of test cases that will fully test your game.
 Remember that you can run these tests inside IntelliJ, by clicking on the green "run" icons to the left of each method in the editor.
@@ -192,7 +192,7 @@ Such analysis is an essential developer skill, as is the ability to document the
 When viewing the example test script, you may have noticed a new test feature not previously encountered - the `@BeforeEach` annotation
 is used to mark a method which will be executed _before_ any `@Test` methods are run.
 This allows us to create a "setup" method that will initialise any instances that are required to successfully run a `@Test` method.
-You will also see the use of the `()->` "lambda" expression. Don't worry about this for the moment, we will consider it in more detail in the next workbook.
+You will also see the use of the `()->` 'lambda' expression. Don't worry about this for the moment, we will consider it in more detail in the next workbook.
 
   
 

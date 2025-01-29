@@ -4,4 +4,4 @@ that allow the user to change the size of the board during the game. If the user
 The minimum allowable board size is 3x3 and the maximum allowable board size 9x9 - your event handler should not allow the board size to change outside of this range. In addition to this, your game should not allow the board size to be reduced if the rows/columns being removed are not empty (i.e. don't allow reduction if it will remove previous moves).
 
 You should NOT alter the board size when the game is reset (i.e. when the `ESC` key is pressed).
-It is up the the players to choose the board size for the next game.
+Keep the board size the same and leave it to the players to change the dimensions, if they wish.

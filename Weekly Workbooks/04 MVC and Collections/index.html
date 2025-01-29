@@ -217,8 +217,9 @@ no winner !)</li>
 </ul>
 <p>The ‘Rendering Logic’ has already been implemented for you: any
 changes to the state of the <code>OXOModel</code> will be automatically
-rendered by the <code>OXOView</code>. Your main task is to implement the
-‘Event Handling Logic’ in the <code>OXOCOntroller</code> class.</p>
+rendered by the <code>OXOView</code>. Your main task is therefore to
+implement the ‘Event Handling Logic’ in the <code>OXOCOntroller</code>
+class.</p>
 <p>The code that you write must access and manipulate the state of the
 <code>OXOModel</code> by calling appropriate methods on it. Note that
 you will NOT need to interface directly with the <code>OXOView</code>
@@ -242,8 +243,9 @@ many have a private attribute called <code>serialVersionUID</code>. GUI
 applications written in Java require classes to meet these requirements
 so that the application can be stored (‘serialized’) in certain
 situations. We won’t be doing any serialization in this exercise,
-however we still need to implement the above features (otherwise we will
-get warnings when we try to compile the project).</p>
+however we still need to include the above features in the project
+template (otherwise we will get warnings when we try to compile the
+project).</p>
 <h1 id="section-1"></h1>
 <h3 id="task-3-responding-to-input">Task 3: Responding to Input</h3>
 <p><a href='03%20Responding%20to%20Input/video/oxo.mp4' target='_blank'>
@@ -268,7 +270,7 @@ play should switch to the next player. Note that the order of play
 should be the same as the order that players were added to the model
 (i.e. the first player added to the game will take the first go,
 followed by the second etc.)</p>
-<p>When updating the game state, you should set the “current player” to
+<p>When updating the game state, you should set the ‘current player’ to
 be the player <em>whose turn it is next</em>. This is to ensure that the
 view shows graphically the player <em>who is about to take a
 turn</em>.</p>
@@ -305,14 +307,14 @@ settings.</p>
 <img src="../../resources/icons/deep.png" /> </a></p>
 <p>Currently the core data structure of the <code>OXOModel</code> class
 is a 2D array. This allows us to maintain a data representation of the
-current state of the board at any particular time. There is however a
-problem in that this constrains us to a particular board size (for
-example 3x3). It would be nice to be able to alter the size of the board
-<em>during</em> a game ! For example, if during a game it became clear
-that there was going to be a draw (with all cells being occupied, but
-with no clear winner) it would be nice if the user could optionally
-increase the board size in order to allow play to continue (in the hope
-that a winner might eventually triumph !)</p>
+current state of the game board. There is however a problem in that this
+constrains us to a particular board size (namely 3x3). It would be nice
+to be able to alter the size of the board <em>during</em> a game ! For
+example, if during a game it became clear that there was going to be a
+draw (with all cells being occupied, but with no clear winner) it would
+be nice if the user could optionally increase the board size in order to
+allow play to continue (in the hope that a winner might eventually
+triumph !)</p>
 <p>Luckily there are a number of dynamic data types (such as Queues,
 Stacks, Lists etc.) that are provided by the core Java libraries that
 allow us to store <em>dynamically</em> sized groups of objects. Take a
@@ -327,9 +329,9 @@ time enforcing type checking at compile time.</p>
 <p>Using the knowledge you have gained from the above slides and videos,
 convert the board grid data structure contained in the
 <code>OXOModel</code> class from arrays into an
-<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/ArrayList.html" target="_blank">ArrayList</a>
+<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" target="_blank">ArrayList</a>
 data structure.</p>
-<p>In order to fully implement dynamic board size features, you will
+<p>In order to fully implement support for dynamic board sizes, you will
 need to: - Change your <code>cells</code> variable from a 2D array into
 some <code>ArrayList</code> elements - Alter the OXOModel constructor to
 initialise your <code>ArrayList</code> data structure - Update the cell
@@ -362,8 +364,8 @@ allow the board size to be reduced if the rows/columns being removed are
 not empty (i.e. don’t allow reduction if it will remove previous
 moves).</p>
 <p>You should NOT alter the board size when the game is reset (i.e. when
-the <code>ESC</code> key is pressed). It is up the the players to choose
-the board size for the next game.</p>
+the <code>ESC</code> key is pressed). Keep the board size the same and
+leave it to the players to change the dimensions, if they wish.</p>
 <h1 id="section-3"></h1>
 <h3 id="task-5-win-detection">Task 5: Win detection</h3>
 <p>There is no point playing the game if nobody can actually win ! With
@@ -394,17 +396,17 @@ the board in the usual way (by pressing the <code>ESC</code> key).</p>
 <h1 id="section-4"></h1>
 <h3 id="task-6-automated-testing">Task 6: Automated Testing</h3>
 <p>The problem with manual testing is that it can be a very time
-consuming activity to undertake. Imagine trying to test the “draw” state
-for a 9x9 board - this would involve taking 100 separate turns to reach
+consuming activity to undertake. Imagine trying to test the ‘draw’ state
+for a 9x9 board - this would involve taking 81 separate turns to reach
 the end of the game. Now imagine having to test this draw state a number
 of times (maybe your code didn’t work the first time you tried it - and
 you have to change your code and test it again). This would soon become
 very tedious !</p>
 <p>This is where automated testing can become invaluable - we can test
 the ‘model’ and ‘controller’ components of the system by replacing the
-graphical “view” with an automated test script. The game can then be
+graphical ‘view’ with an automated test script. The game can then be
 extensively tested without having to click the mouse or press a key.</p>
-<p>We have provide a skeleton test script called
+<p>We have provided a skeleton test script called
 <code>ExampleControllerTests</code> that can be found in the
 <code>src/test/java/edu/uob</code> folder. You will notice that the file
 has only a couple of test methods in it. You should populate this test
@@ -436,7 +438,7 @@ annotation is used to mark a method which will be executed
 <em>before</em> any <code>@Test</code> methods are run. This allows us
 to create a “setup” method that will initialise any instances that are
 required to successfully run a <code>@Test</code> method. You will also
-see the use of the <code>()-&gt;</code> “lambda” expression. Don’t worry
+see the use of the <code>()-&gt;</code> ‘lambda’ expression. Don’t worry
 about this for the moment, we will consider it in more detail in the
 next workbook.</p>
 <h1 id="section-5"></h1>

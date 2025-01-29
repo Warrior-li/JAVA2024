@@ -17,7 +17,7 @@ provided by this class in order to access and manipulate the following internal 
 - Whether or not the game has been drawn (all cells filled, but with no winner !)
 
 The 'Rendering Logic' has already been implemented for you: any changes to the state of the `OXOModel` will be automatically rendered by the `OXOView`. 
-Your main task is to implement the 'Event Handling Logic' in the `OXOCOntroller` class.
+Your main task is therefore to implement the 'Event Handling Logic' in the `OXOCOntroller` class.
 
 The code that you write must access and manipulate the state of the `OXOModel` by calling appropriate methods on it.
 Note that you will NOT need to interface directly with the `OXOView` class.

@@ -13,7 +13,7 @@ Once one player has entered a command and the board has been updated, play shoul
 Note that the order of play should be the same as the order that players were added to the model
 (i.e. the first player added to the game will take the first go, followed by the second etc.)
 
-When updating the game state, you should set the "current player" to be the player _whose turn it is next_.
+When updating the game state, you should set the 'current player' to be the player _whose turn it is next_.
 This is to ensure that the view shows graphically the player _who is about to take a turn_.
 
 It is possible that the user may make a mistake when interacting with the system and enter a "bad" cell identifier.

@@ -1,12 +1,12 @@
 The problem with manual testing is that it can be a very time consuming activity to undertake.
-Imagine trying to test the "draw" state for a 9x9 board - this would involve taking 100 separate turns to reach the end of the game.
+Imagine trying to test the 'draw' state for a 9x9 board - this would involve taking 81 separate turns to reach the end of the game.
 Now imagine having to test this draw state a number of times (maybe your code didn't work the first time you tried it -
 and you have to change your code and test it again). This would soon become very tedious !
 
 This is where automated testing can become invaluable - we can test the 'model' and 'controller' components of the system by replacing
-the graphical "view" with an automated test script. The game can then be extensively tested without having to click the mouse or press a key.
+the graphical 'view' with an automated test script. The game can then be extensively tested without having to click the mouse or press a key.
 
-We have provide a skeleton test script called `ExampleControllerTests` that can be found in the `src/test/java/edu/uob` folder.
+We have provided a skeleton test script called `ExampleControllerTests` that can be found in the `src/test/java/edu/uob` folder.
 You will notice that the file has only a couple of test methods in it.
 You should populate this test script with a comprehensive set of test cases that will fully test your game.
 Remember that you can run these tests inside IntelliJ, by clicking on the green "run" icons to the left of each method in the editor.
