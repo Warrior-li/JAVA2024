@@ -153,19 +153,19 @@ Let's imagine that we wanted to find out the variant of all `Triangles` that are
 We would need to be very careful about how we went about interrogating the elements of that array.
 We can't call `getVariant` on just any element, since not all objects will actually _be_ a `Triangle`
 (it might be a `Circle` for example, which doesn't support the `getVariant` method !)
-Java will in fact block us from trying to call `getVariant` on a `TwoDimentionalShape`
+Java will in fact block us from trying to call `getVariant` on a `TwoDimensionalShape`
 (try it and see !).
 
 To solve this problem, Java allows us **cast** objects from one class into a _more specific_ class.
-For example, we can "down-cast" (or "narrow-cast") any `TwoDimentionalShape` into one of its sub-classes.
+For example, we can "down-cast" (or "narrow-cast") any `TwoDimensionalShape` into one of its sub-classes.
 We can then quite happily call methods of that subclass on the instance.
 For example, in the code fragment below we extract the first element from the array,
 convert it into a `Triangle` and then call the `getVariant` method on it:
 
 ``` java
-TwoDimentionalShape[] shapes = new TwoDimentionalShape[100];
+TwoDimensionalShape[] shapes = new TwoDimensionalShape[100];
 ...
-TwoDimentionalShape firstShape = shapes[0];
+TwoDimensionalShape firstShape = shapes[0];
 // Down-cast the shape into a triangle
 Triangle firstTriangle = (Triangle)firstShape;
 TriangleVariant variant = firstTriangle.getVariant();

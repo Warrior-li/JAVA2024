@@ -425,20 +425,20 @@ array. We can’t call <code>getVariant</code> on just any element, since
 not all objects will actually <em>be</em> a <code>Triangle</code> (it
 might be a <code>Circle</code> for example, which doesn’t support the
 <code>getVariant</code> method !) Java will in fact block us from trying
-to call <code>getVariant</code> on a <code>TwoDimentionalShape</code>
+to call <code>getVariant</code> on a <code>TwoDimensionalShape</code>
 (try it and see !).</p>
 <p>To solve this problem, Java allows us <strong>cast</strong> objects
 from one class into a <em>more specific</em> class. For example, we can
-“down-cast” (or “narrow-cast”) any <code>TwoDimentionalShape</code> into
+“down-cast” (or “narrow-cast”) any <code>TwoDimensionalShape</code> into
 one of its sub-classes. We can then quite happily call methods of that
 subclass on the instance. For example, in the code fragment below we
 extract the first element from the array, convert it into a
 <code>Triangle</code> and then call the <code>getVariant</code> method
 on it:</p>
 <div class="sourceCode" id="cb3"><pre
-class="sourceCode java"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>TwoDimentionalShape<span class="op">[]</span> shapes <span class="op">=</span> <span class="kw">new</span> TwoDimentionalShape<span class="op">[</span><span class="dv">100</span><span class="op">];</span></span>
+class="sourceCode java"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>TwoDimensionalShape<span class="op">[]</span> shapes <span class="op">=</span> <span class="kw">new</span> TwoDimensionalShape<span class="op">[</span><span class="dv">100</span><span class="op">];</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>TwoDimentionalShape firstShape <span class="op">=</span> shapes<span class="op">[</span><span class="dv">0</span><span class="op">];</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>TwoDimensionalShape firstShape <span class="op">=</span> shapes<span class="op">[</span><span class="dv">0</span><span class="op">];</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Down-cast the shape into a triangle</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>Triangle firstTriangle <span class="op">=</span> <span class="op">(</span>Triangle<span class="op">)</span>firstShape<span class="op">;</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>TriangleVariant variant <span class="op">=</span> firstTriangle<span class="op">.</span><span class="fu">getVariant</span><span class="op">();</span></span></code></pre></div>
