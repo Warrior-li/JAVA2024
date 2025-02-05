@@ -9,8 +9,8 @@ When making use of exceptions in our OXO game, we first need to appreciate the r
 input error that are possible. These include the following:
 
 - Invalid Identifier Length: The entire identifier string is longer (or shorter) than the required two characters
-- Invalid Identifier Character: The row character is not alphabetic or the column character is not numerical
-- Outside Range: The identifiers are valid, but they are out the range of the board size (i.e. too big or too small)
+- Invalid Identifier Character: The row character is not alphabetical and/or the column character is not numerical
+- Outside Range: The identifiers are valid, but they are outside the range of the board size (i.e. too big or too small)
 - Already Taken: The specified cell exists, but it has already been claimed by a player
 
 Note that these input errors are listed in order of precedence (i.e. when processing an incoming command, you should
@@ -23,5 +23,5 @@ can be used to represent each of the above types of error. Note that all of thes
 _normally_ a one-to-one mapping between a file and a class. In this situation however we break this convention in the
 interests of a tidy file system ! Each exception class is very short and as such don't warrant individual files of their own.
 
-These exception classes that you have been provided with are illustrated in the class hierarchy shown below
+The exception classes that you have been provided with are illustrated in the class hierarchy shown below
 (note that the notations used in the diagram are from UML - something that you will be studying in the Software Engineering unit !)

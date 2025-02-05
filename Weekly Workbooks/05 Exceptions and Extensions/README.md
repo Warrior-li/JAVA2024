@@ -21,8 +21,8 @@ When making use of exceptions in our OXO game, we first need to appreciate the r
 input error that are possible. These include the following:
 
 - Invalid Identifier Length: The entire identifier string is longer (or shorter) than the required two characters
-- Invalid Identifier Character: The row character is not alphabetic or the column character is not numerical
-- Outside Range: The identifiers are valid, but they are out the range of the board size (i.e. too big or too small)
+- Invalid Identifier Character: The row character is not alphabetical and/or the column character is not numerical
+- Outside Range: The identifiers are valid, but they are outside the range of the board size (i.e. too big or too small)
 - Already Taken: The specified cell exists, but it has already been claimed by a player
 
 Note that these input errors are listed in order of precedence (i.e. when processing an incoming command, you should
@@ -35,7 +35,7 @@ can be used to represent each of the above types of error. Note that all of thes
 _normally_ a one-to-one mapping between a file and a class. In this situation however we break this convention in the
 interests of a tidy file system ! Each exception class is very short and as such don't warrant individual files of their own.
 
-These exception classes that you have been provided with are illustrated in the class hierarchy shown below
+The exception classes that you have been provided with are illustrated in the class hierarchy shown below
 (note that the notations used in the diagram are from UML - something that you will be studying in the Software Engineering unit !)  
 
 
@@ -50,14 +50,14 @@ Make sure you have a solid grasp of these concepts before moving on to the next 
 ### Task 3: Error Handling in Practice
  <a href='03%20Error%20Handling%20in%20Practice/slides/segment-1.pdf' target='_blank'> ![](../../resources/icons/slides.png) </a> <a href='03%20Error%20Handling%20in%20Practice/video/segment-1.mp4' target='_blank'> ![](../../resources/icons/video.png) </a>
 
-Now that you have a high-level understanding of Java's exception handling mechanism and an appreciation of the range of input error a user might make, let us use this information to actually implement error handling in the OXO game.
+Now that you have a high-level understanding of Java's exception handling mechanism and an appreciation of the range of input errors a user might make, let us use this information to actually implement error handling in the OXO game.
 Take a look at the slides and video linked to above to find out how to work with exceptions in Java.
 
 With the knowledge you have gained from the above, implement error handling in your `OXOController` class.
 Add appropriate input checking features to your `handleIncomingCommand` method to determine whether or not the
-specified cell identifier is can be accepted:
-- If the identifier is acceptable, mark the specified cell as being owned by the player as normal.
-- If the identifier is unacceptable, prevent the move from taking place and instead instantiate and
+specified cell identifier can be accepted.
+If the identifier is acceptable, mark the specified cell as being owned by the player as normal.
+If on the other hand the identifier is unacceptable, prevent the move from taking place and instead instantiate and
 'throw' the relevant exception (depending on the type of input error that has been made).
 
 The `OXOGame` will 'catch' any exceptions that the `OXOController` has 'thrown' and will print out a relevant
@@ -117,7 +117,7 @@ A subtle, yet important distinction !
 
 The 'Win Threshold' is the number of cells in a row required to win a match (3 in a "standard" game).
 It would make for a more interesting game if it were possible to change this threshold during a game.
-To support this feature, the `OXOGame` class includes interaction features to allow the user to alter the win threshold:
+To support this feature, the `OXOGame` class includes features that allow the user to interactively alter the win threshold:
 - Pressing the `+` key on the keyboard should increase the win threshold 
 - Pressing the `-` key on the keyboard should decrease the win threshold 
 
@@ -130,14 +130,14 @@ so that they alter the win threshold value held inside the `OXOModel` (by callin
 You should make your code as robust as possible, preventing the data held in the model from getting into any undesirable states.
 Your controller must adhere to the following rules:
 - The minimum win threshold should be 3 (a game with a lower threshold is going to be pretty pointless !).
-- The maximum win threshold should be the current size of the board (which ever is smaller: width or height).
-- Users should NOT be able to _reduce_ the win threshold during a game (only at beginning).
+- The maximum win threshold should be the current size of the board (whichever dimension is smaller: width or height).
+- Users should NOT be able to _reduce_ the win threshold _during_ a game (only at beginning).
 - It should be possible to increase the win threshold at any point during the game, except that...
-- The win threshold should NOT be changed after a win - gameplay should cease when someone has won !
+- It should NOT be possible to change the win threshold _after_ a win - gameplay should cease when someone has won !
 
 Note that you should NOT alter the win threshold when the game is reset (i.e. when the `ESC` key is pressed).
-It is up the the players to choose the win threshold for the next game.
-You should also ensure that all game state is stored in the `OXOModel` and NOT in your `OXOController`.
+It is up to the players to choose the win threshold for the next game.
+You should also ensure that all game state is stored inside the `OXOModel` and NOT in your `OXOController` (or anywhere else for that matter).
 
 Be sure to add suitable test cases to your test scripts in order to fully test the variable win threshold features
 (including checking that the controller maintains the threshold according to the rules specified above).  
@@ -147,16 +147,16 @@ Be sure to add suitable test cases to your test scripts in order to fully test t
 ### Task 6: More Players
 
 
-Although two players in the traditional number in an OXO game, allowing additional players would make for a more interesting game.
+Although two players is the traditional number in an OXO game, allowing additional players would make for a more interesting game.
 As an extension to the standard game, add features to your code so that it can support any number of players.
 To achieve this you will need to make changes to both the `OXOModel` as well as your `OXOController`.
-You will need to use alternative player characters for the additional players - having more than one player who's letter is X
-will lead to a lot of confusion !
+You will need to use alternative player characters for the additional players
+(having more than one player who's playing letter is `X` will lead to a lot of confusion !)
 
-You should NOT attempt to alter the `OXOView` or `OXOGame` to allow the _interactive_ setting of the number of players.
+You should NOT attempt to alter the `OXOView` or `OXOGame` classes in order to allow the _interactive_ setting of the number of players.
 Instead, you should focus on testing multi-player games by creating additional test cases in your testing script.
 
-Remember to try to ensure that your code is flexible versatile (don't hard-wire in any fixed values) !
+Remember to try to ensure that your code is flexible versatile (avoid hard-wiring any particular fixed values) !
   
 
 

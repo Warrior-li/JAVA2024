@@ -268,10 +268,10 @@ possible. These include the following:</p>
 <ul>
 <li>Invalid Identifier Length: The entire identifier string is longer
 (or shorter) than the required two characters</li>
-<li>Invalid Identifier Character: The row character is not alphabetic or
-the column character is not numerical</li>
-<li>Outside Range: The identifiers are valid, but they are out the range
-of the board size (i.e. too big or too small)</li>
+<li>Invalid Identifier Character: The row character is not alphabetical
+and/or the column character is not numerical</li>
+<li>Outside Range: The identifiers are valid, but they are outside the
+range of the board size (i.e. too big or too small)</li>
 <li>Already Taken: The specified cell exists, but it has already been
 claimed by a player</li>
 </ul>
@@ -291,7 +291,7 @@ between a file and a class. In this situation however we break this
 convention in the interests of a tidy file system ! Each exception class
 is very short and as such don’t warrant individual files of their
 own.</p>
-<p>These exception classes that you have been provided with are
+<p>The exception classes that you have been provided with are
 illustrated in the class hierarchy shown below (note that the notations
 used in the diagram are from UML - something that you will be studying
 in the Software Engineering unit !)</p>
@@ -310,16 +310,16 @@ Practice</h3>
 <a href='03%20Error%20Handling%20in%20Practice/video/segment-1.mp4' target='_blank'>
 <img src="../../resources/icons/video.png" /> </a></p>
 <p>Now that you have a high-level understanding of Java’s exception
-handling mechanism and an appreciation of the range of input error a
+handling mechanism and an appreciation of the range of input errors a
 user might make, let us use this information to actually implement error
 handling in the OXO game. Take a look at the slides and video linked to
 above to find out how to work with exceptions in Java.</p>
 <p>With the knowledge you have gained from the above, implement error
 handling in your <code>OXOController</code> class. Add appropriate input
 checking features to your <code>handleIncomingCommand</code> method to
-determine whether or not the specified cell identifier is can be
-accepted: - If the identifier is acceptable, mark the specified cell as
-being owned by the player as normal. - If the identifier is
+determine whether or not the specified cell identifier can be accepted.
+If the identifier is acceptable, mark the specified cell as being owned
+by the player as normal. If on the other hand the identifier is
 unacceptable, prevent the move from taking place and instead instantiate
 and ‘throw’ the relevant exception (depending on the type of input error
 that has been made).</p>
@@ -388,11 +388,11 @@ and check that it is of the correct type.</p>
 <p>The ‘Win Threshold’ is the number of cells in a row required to win a
 match (3 in a “standard” game). It would make for a more interesting
 game if it were possible to change this threshold during a game. To
-support this feature, the <code>OXOGame</code> class includes
-interaction features to allow the user to alter the win threshold: -
-Pressing the <code>+</code> key on the keyboard should increase the win
-threshold - Pressing the <code>-</code> key on the keyboard should
-decrease the win threshold</p>
+support this feature, the <code>OXOGame</code> class includes features
+that allow the user to interactively alter the win threshold: - Pressing
+the <code>+</code> key on the keyboard should increase the win threshold
+- Pressing the <code>-</code> key on the keyboard should decrease the
+win threshold</p>
 <p>Although the <code>OXOGame</code> class is able to detect the
 pressing of the <code>+</code> and <code>-</code> keys, the internal win
 threshold is currently not updated. The
@@ -409,37 +409,39 @@ held in the model from getting into any undesirable states. Your
 controller must adhere to the following rules: - The minimum win
 threshold should be 3 (a game with a lower threshold is going to be
 pretty pointless !). - The maximum win threshold should be the current
-size of the board (which ever is smaller: width or height). - Users
-should NOT be able to <em>reduce</em> the win threshold during a game
-(only at beginning). - It should be possible to increase the win
-threshold at any point during the game, except that… - The win threshold
-should NOT be changed after a win - gameplay should cease when someone
-has won !</p>
+size of the board (whichever dimension is smaller: width or height). -
+Users should NOT be able to <em>reduce</em> the win threshold
+<em>during</em> a game (only at beginning). - It should be possible to
+increase the win threshold at any point during the game, except that… -
+It should NOT be possible to change the win threshold <em>after</em> a
+win - gameplay should cease when someone has won !</p>
 <p>Note that you should NOT alter the win threshold when the game is
-reset (i.e. when the <code>ESC</code> key is pressed). It is up the the
+reset (i.e. when the <code>ESC</code> key is pressed). It is up to the
 players to choose the win threshold for the next game. You should also
-ensure that all game state is stored in the <code>OXOModel</code> and
-NOT in your <code>OXOController</code>.</p>
+ensure that all game state is stored inside the <code>OXOModel</code>
+and NOT in your <code>OXOController</code> (or anywhere else for that
+matter).</p>
 <p>Be sure to add suitable test cases to your test scripts in order to
 fully test the variable win threshold features (including checking that
 the controller maintains the threshold according to the rules specified
 above).</p>
 <h1 id="section-4"></h1>
 <h3 id="task-6-more-players">Task 6: More Players</h3>
-<p>Although two players in the traditional number in an OXO game,
+<p>Although two players is the traditional number in an OXO game,
 allowing additional players would make for a more interesting game. As
 an extension to the standard game, add features to your code so that it
 can support any number of players. To achieve this you will need to make
 changes to both the <code>OXOModel</code> as well as your
 <code>OXOController</code>. You will need to use alternative player
-characters for the additional players - having more than one player
-who’s letter is X will lead to a lot of confusion !</p>
+characters for the additional players (having more than one player who’s
+playing letter is <code>X</code> will lead to a lot of confusion !)</p>
 <p>You should NOT attempt to alter the <code>OXOView</code> or
-<code>OXOGame</code> to allow the <em>interactive</em> setting of the
-number of players. Instead, you should focus on testing multi-player
-games by creating additional test cases in your testing script.</p>
-<p>Remember to try to ensure that your code is flexible versatile (don’t
-hard-wire in any fixed values) !</p>
+<code>OXOGame</code> classes in order to allow the <em>interactive</em>
+setting of the number of players. Instead, you should focus on testing
+multi-player games by creating additional test cases in your testing
+script.</p>
+<p>Remember to try to ensure that your code is flexible versatile (avoid
+hard-wiring any particular fixed values) !</p>
 <h1 id="section-5"></h1>
 </body>
 </html>
