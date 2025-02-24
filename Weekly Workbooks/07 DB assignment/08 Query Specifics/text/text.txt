@@ -1,0 +1,25 @@
+When you start to dig deeper into the complexities of the assignment, you will no doubt have a variety of questions of specific aspects of system functionality.
+This section attempts to provide more detail regarding the intended operation of the database server.
+
+#### _SQL keywords_
+Convention has it that query examples are typically shown with uppercase keywords (to differentiate them from identifiers and literals). However, SQL keywords are in fact case insensitive, so `select * from people;` is equivalent to `SELECT * FROM people;`. This is true for all keywords in the BNF (including `TRUE`/`FALSE`, `AND`/`OR`, `LIKE` etc.).
+In addition to this, all SQL keywords are reserved words, therefore you should not allow them to be used as database/table/attribute names. The server should return an error if the user attempts to misuse a reserved keyword (see the following task for details of the error handling mechanism to be used).
+
+#### _Comparisons_
+It is not necessary to implement a datatype system within the database - you can just store everything as simple text strings.
+You should perform `>`, `>=`, `<`, `<=` comparisons wherever it is possible to do something sensible (e.g. with floats, ints, strings etc).
+In situations where no appropriate comparison is possible (e.g. `firstName > 12`) don't try to trap the query and return an error, just return no data in the results table.
+The `LIKE` comparator is intended just for use with strings and provides a simple case sensitive substring matcher (NOT the full SQL `LIKE` operator with % wildcarding).
+If the user attempts to perform a `LIKE` query on non-string data (e.g. ints, floats, booleans) your server should not return an error,
+but just perform the query as though the data were a string (even if this causes some strange results).
+
+#### _JOIN Attribute Ordering_
+Table attributes of our simplified query language are 'unqualified' (i.e. they do not include the name of the table within which an attribute resides).
+When performing a `JOIN` query therefore, we must ensure that the ordering of the specified tables is the same as the ordering of the specified attributes.
+For example, a query should be of the form: `JOIN tableOne AND tableTwo ON attributeFromTableOne AND attributeFromTableTwo;`
+Enforcing this ordering makes it possible for your server to easily identify the specific attributes referred to by a query.
+
+#### _Response tables_
+The order of values returned by a `SELECT` should be the same as that specified in the query (e.g. `SELECT name, id FROM marks` would return the `name` column first, followed by the `id` column). Note that `SELECT *` should return the values in the order that they are stored in the table. The table returned by a `JOIN` should contain attribute names in the form `OriginalTableName.AttributeName` (see the <a href="resources/example-transcript.docx" target="_blank">query transcript</a> for specific examples). 
+This is so the user can determine which attributes came from which tables (as well as coping with the situation where
+two tables have attributes of the same name). Note that these composite names are purely for the display of the tables - attribute names containing `.` characters are not permitted by the BNF and are therefore not valid for use in queries. The joined table should NOT contain the ID columns from the original tables, but rather should include a new ID column containing freshly generated IDs.

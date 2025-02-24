@@ -1,0 +1,29 @@
+Although we have described the communication mechanism that should be used, we still need something to actually transmit !
+Clients will communicate with the server using a simplified version of the SQL database query language.
+Your task is to write a handler for the incoming messages which will: parse the incoming command, perform the specified query, update the data stored in the database and return an appropriate result to the client.
+Be sure to save any changed data back to the file system - you don't want to risk losing any in-memory updates (in case your server crashes, or is kill off).
+
+The query language we will use for this assignment supports the following queries:
+
+- USE: switches the database against which the following queries will be run
+- CREATE: constructs a new database or table (depending on the provided parameters)
+- INSERT: adds a new record (row) to an existing table
+- SELECT: searches for records that match the given condition
+- UPDATE: changes the existing data contained within the rows of a table
+- ALTER: changes the structure (columns) of an existing table
+- DELETE: removes records that match the given condition from an existing table
+- DROP: removes a specified table from a database, or removes the entire database
+- JOIN: performs an **inner** join on two tables (returning all permutations of all matching records)
+
+A grammar that fully defines the simplified query language is provided in <a href="resources/BNF.txt" target="_blank">this BNF document</a>. You will note that BNF grammar contains two distinct types of rule:
+- Symbols with angle brackets `<name>` denote rules which MAY contain arbitrary additional whitespace 
+- Symbols with square brackets `[name]` indicate rules that can NOT contain additional whitespace
+
+As a consequence of these rules, your server should be able to correctly parse incoming commands irrespective of the number of _additional_ whitespace
+characters between certain tokens. So for example: 
+<pre>SELECT    *  FROM     people  WHERE   Name  ==  'Steve' ;</pre>
+is valid and acceptable, being equivalent to:
+<pre>SELECT * FROM people WHERE Name=='Steve';</pre>
+
+Dealing the such additional whitespace might seem like a daunting and challenging task.
+Don't panic, we will provide you some help and advice for dealing with such queries.

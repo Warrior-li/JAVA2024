@@ -1,0 +1,15 @@
+Relationships between records in different tables should be recorded using 'foreign keys'.
+For example, the `PurchaserID` in the table illustrated below is a reference to the `id` of a person from the example table in the previous task.
+This additional data file is <a href="resources/sheds.tab" target="_blank">provided for you</a> in order to aid you in developing a solution.
+Note that only single element keys are in use (i.e. you do not need to cope with 'composite' keys).
+
+It is important that the `id` of a record must NOT change at any time during the operation of the system
+(once a record has been assigned an `id` this must stay fixed for as long as that record is kept in the database).
+Additionally, you should not "recycle" the IDs in any table (i.e. reusing the IDs for new rows after old rows have been deleted).
+This is because the IDs might be used as foreign keys elsewhere in the database and there is the risk that unintentional relationships are created.
+
+For simplicity, no primary or foreign key marker keywords are provided in the query language - the server relies upon the user remembering which attributes are keys.
+This might seem like a problematic limitation in the query language, however we have to draw the line somewhere (otherwise the assignment would become too complex to implement in the given timeframe).
+
+Note that it is _not_ your responsibility to normalise the database - this is a job for the developers who have designed the database schema and who make use of your database server.
+If you don't know what normalisation is, then don't worry - you don't need to know for this assignment anyway !

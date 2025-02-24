@@ -1,0 +1,26 @@
+It is not the aim of this assignment to address the topic of network or socket programming.
+For this reason, the networking aspects of the server have been provided for you
+in <a href="resources/cw-db/src/main/java/edu/uob/DBServer.java" target="_blank">the template server class</a>.
+This server can be run from the command line using `mvnw exec:java@server`.
+The database server listens on port `8888` in order to receive incoming messages. These incoming commands are then
+passed to the `handleCommand` method for processing. Your task is to add to the `handleCommand` method to respond to the commands.
+
+It is up to you how you format the printing of the table content.
+You should however attempt to make the response as human-reader-friendly as possible. 
+You will see from the sample test script provided in the template project that the tests have been written using simple word matching.
+This has been done because output formatting will vary from implementation to implementation and the test cases need to work with all students' code.
+You should use the same approach when writing your own tests.
+
+It is essential that your response is returned by the `handleCommand` method and NOT just printed out in the local terminal/console.
+When we test your server during the marking process, we will be monitoring what is returned via the network.
+You won't get any marks for just doing `println` messages in the terminal !
+
+To help you ensure that your server conforms to the correct protocol, a 
+<a href="resources/cw-db/src/main/java/edu/uob/DBClient.java" target="_blank">command-line client</a>
+has been provided for you. This client can be run from the command line using `mvnw exec:java@client`.
+You should not change any of the code in the client - any features that you implement in this class
+will not be executed during the marking process.
+The client has been provided purely to allow you to manually check that your server is operating correctly.
+During the marking process, your server will be marked entirely by automated test scripts.
+
+For the sake of simplicity, you may assume only a single client connects to the server at any one time (i.e. there is no need to handle parallel queries or deal with issues of contention).

@@ -1,0 +1,4 @@
+Note that you should NOT use any existing parsers or parser generators (Yacc, Lex, Antlr etc.) The aim of this assignment is to implement the command parsing using your own code.
+
+To help further illustrate the use of the simplified query language, we have provided <a href="resources/example-transcript.docx" target="_blank">a sample transcript</a> which shows a series of example queries and the response we expect to see the the server. 
+In this assignment, we will not be providing you with an extensive set of tests cases for you to check the effectiveness of your code. Learning to write your own comprehensive set of test cases is a key part of becoming a 'developer'. The aim of the query transcript and the BNF grammar is to provide you with as much help as possible in achieving this objective. 

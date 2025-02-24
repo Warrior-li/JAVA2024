@@ -1,0 +1,20 @@
+As a useful starting point, your first task is to write a method that reads in the data from the
+<a href="resources/people.tab" target="_blank">sample data file</a> using the Java
+<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/package-summary.html" target="_blank">File IO API</a>.
+View the slides and video at the start of this section for an overview of these packages.
+At this stage you need only print out the content of these records to the terminal (in a later task you will store this data
+in a suitable in-memory data structure).
+
+When working with file paths, it is **essential** that you do not use any platform-specific file separators.
+Some platforms use `\` and some platforms use `/` for separating folder names in a file path.
+Java code should work on ALL platforms - for this reason, you should make use of the
+<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html#separator" target="_blank">File.separator</a>
+constant (which will contain the relevant character for the platform that the code is currently running on).
+
+Feel free to extend the file storage mechanism described above if you need to implement additional features.
+Your server will only ever need to read in files that your server has created.
+During testing, all databases and tables will be created by sending queries to your server - we will NOT be copying any existing data files of our own
+into the `databases` folder.
+Note that if you encounter a tab file with invalid formatting when reading in data from the filesystem, your file parsing method should 
+throw an `IOException`. You should however ensure that this exception is subsequently caught by another part of your server - remember:
+don't let your server crash !

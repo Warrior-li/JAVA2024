@@ -1,0 +1,31 @@
+Your query interpreter should identify any errors in the structure and content of incoming queries.
+The response returned from your server back to the client must begin with one of the following two "status" tags:
+
+- `[OK]` for valid and successful queries, followed by the results of the query.
+- `[ERROR]` if the query is invalid, followed by a suitable human-readable message that provides information about the nature of the error.
+
+Errors should be returned to the client if the SQL is malformed (i.e. doesn't conform to the BNF) or when the user attempts to perform prohibited actions,
+including (but not limited to):
+- trying to insert too many (or too few) values into a table entry
+- attempting to create a database or table using a name that already exists
+- creating a table with duplicate column names (or trying to add a column with an existing name)
+- attempting to remove the ID column from a table
+- changing (updating) the ID of a record
+- queries on non-existent databases, tables and columns
+- queries which use invalid element names (e.g. reserved SQL keywords)
+
+Errors should NOT be returned in situations where the user performs:
+- a valid query that has no matches: just return the column names and no data rows
+- a query to delete columns/tables/rows/database that contain data: the user should be free to perform destructive actions
+- a comparison of two different data types: attempt a sensible comparison if possible, return blank results if no comparison is possible
+
+Note that because you are not required to maintain type information for the attributes
+in a table, it will not be possible for you to validate the type of inserted data.
+It is therefore the responsibility of the user to ensure that only numerical data is stored in
+numerical attributes and string data is stored in string attributes etc.
+
+You may wish to make use of exceptions to handle errors internally within your server, however these should NOT be returned to the client.
+Java exceptions are for the benefit of Java programmers - they are not intended for use as user error messages.
+It is essential that your response back to the client begins with the correct status tag (either `[OK]` or `[ERROR]`).
+These will be used by the automated testing scripts during the marking process.
+The "human-readable" error message text will not be assessed during the marking process - we trust you to make the effort of returning something appropriate !
