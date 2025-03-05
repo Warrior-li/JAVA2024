@@ -71,7 +71,19 @@
 
 <AttributeList>   ::=  [AttributeName] | [AttributeName] "," <AttributeList>
 
-<Condition>       ::=  "(" <Condition> <BoolOperator> <Condition> ")" | <Condition> <BoolOperator> <Condition> | "(" [AttributeName] <Comparator> [Value] ")" | [AttributeName] <Comparator> [Value]
+# We have made an adjustment to the following rule - in it's original form, some valid queries would be very hard to parse
+# For example, the following query was valid according to BNF: SELECT * FROM STUDENTS WHERE AGE>10ANDMARK>70;
+# With the revised rules, the above would NOT be valid and would need to be replaced by: SELECT * FROM STUDENTS WHERE AGE>10 AND MARK>70;
+<OLD-Condition>   ::=  "(" <Condition> <BoolOperator> <Condition> ")" | <Condition> <BoolOperator> <Condition> | "(" [AttributeName] <Comparator> [Value] ")" | [AttributeName] <Comparator> [Value]
+
+<Condition>       ::=  "(" <Condition> ")" | <FirstCondition> <BoolOperator> <SecondCondition> | [AttributeName] <Comparator> [Value]
+
+<FirstCondition>  ::=  <Condition> " " | "(" <Condition> ")"
+
+<SecondCondition> ::=  " " <Condition> | "(" <Condition> ")"
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 <BoolOperator>    ::= "AND" | "OR"
 
