@@ -17,6 +17,10 @@ public class DBServer {
     private static final char END_OF_TRANSMISSION = 4;
     private String storageFolderPath;
 
+
+    
+
+
     public static void main(String args[]) throws IOException {
         DBServer server = new DBServer();
         server.blockingListenOn(8888);
@@ -33,6 +37,11 @@ public class DBServer {
         } catch(IOException ioe) {
             System.out.println("Can't seem to create database storage folder " + storageFolderPath);
         }
+
+        
+
+
+
     }
 
     /**
