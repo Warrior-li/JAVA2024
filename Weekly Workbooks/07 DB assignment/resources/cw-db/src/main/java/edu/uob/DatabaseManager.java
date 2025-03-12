@@ -1,6 +1,8 @@
 package edu.uob;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -74,5 +76,21 @@ public class DatabaseManager {
 
     public void saveTable(Table table) throws IOException {
         String fileName = storageFolderPath + File.separator + table.getName().toLowerCase() + ".tab";
+        File file = new File(fileName);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
+            List<String> columnNames = table.getColumns();
+            writer.write(String.join("\t", columnNames));
+            writer.newLine();
+            for(List<String> row: table.getRows()){
+                writer.write(String.join("\t", row));
+                writer.newLine();
+            }
+        }
+    }
+
+    public void saveAllTables(Map<String, Table> tables) throws IOException {
+        for(Table table: tables.values()){
+            saveTable(table);
+        }
     }
 }
