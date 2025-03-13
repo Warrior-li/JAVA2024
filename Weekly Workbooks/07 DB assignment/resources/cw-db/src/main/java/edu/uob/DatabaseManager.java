@@ -26,7 +26,10 @@ public class DatabaseManager {
         }
         for(File file: files){
             if(file.isFile()){
-                String tableName = file.getName();
+                String fileName = file.getName();
+                String tableName = fileName.endsWith(".tab") 
+                ? fileName.substring(0, fileName.length() - 4)
+                : fileName;
                 Table table = loadTableFromFile(file, tableName);
                 tables.put(tableName,table);
             }
@@ -46,14 +49,14 @@ public class DatabaseManager {
         // 表头 列名
         String headerLine = lines.get(0);
         String[] headers = headerLine.split("\t");
-        if(headers.length == 0 || !headers[0].equals("is")){
+        if(headers.length == 0 || !headers[0].equals("id")){
             throw new IOException("Table File " + file.getName() + "'s first line must be 'id'");
         }
 
         // id之后都是数据
         List<String> columns = new ArrayList<>();
         for(int i = 0; i < headers.length - 1; ++i){
-            columns.add(headers[i]);
+            columns.add(headers[i+1]);
         }
 
         Table table = new Table(tableName, columns);
@@ -66,7 +69,7 @@ public class DatabaseManager {
                 throw new IOException("Files " + file.getName() + " lines" + (i+1) + " invaild");
             }
             List<String> roeData = new ArrayList<>();
-            for(int j = 0; j < fileds.length; ++j){
+            for(int j = 1; j < fileds.length; ++j){
                 roeData.add(fileds[j]);
             }
             table.addRow(roeData);
@@ -93,4 +96,13 @@ public class DatabaseManager {
             saveTable(table);
         }
     }
+
+    public String getStorageFolderPath() {
+        return storageFolderPath;
+    }
+
+    public void setStorageFolderPath(String storageFolderPath) {
+        this.storageFolderPath = storageFolderPath;
+    }
+    
 }
