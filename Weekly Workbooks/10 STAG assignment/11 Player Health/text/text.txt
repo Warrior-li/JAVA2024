@@ -1,0 +1,25 @@
+As an extension to the basic game, you might like to add a "health level" feature.
+Each player should start with the maximum health level of 3. Consumption of "Poisons & Potions" or interaction with beneficial
+or dangerous characters will increase or decrease a player's health by one point. You will see in the 
+<a href="resources/cw-stag/config/extended-actions.xml" target="_blank">extended actions file</a>
+the use of the `health` keyword in the `produced` and `consumed` fields.
+These indicate actions which increase and decrease your health by one unit.
+Note that although a player's health can never increase above the maximum (i.e. 3)
+actions producing health are still _performable_ but they will have no effect on the player's health level.
+
+When a player's health runs out (i.e. when it becomes zero) they should lose all of the items in their inventory
+(which are dropped in the location where they ran out of health).
+The player should then be transported to the start location of the game and their health level restored to full (i.e. 3).
+You might also like to send a suitable message to the user, for example:
+```
+you died and lost all of your items, you must return to the start of the game
+```
+It is important that you should not reset the whole game state when one player dies
+(for example, previously opened location paths should still exist).
+You should remember that there may be more than one player of the game - they shouldn't see their world change just
+because another player has died.
+
+In order to fully support these features in your game engine, you should implement a new `health` built-in command,
+so that the player can keep track of their current health level. Upon receiving a `health` command from a user,
+the server should report back the player's current health level (as a number).
+

@@ -1,0 +1,6 @@
+To ensure that the basic actions file is in the correct location in the project folder and that it can be accessed by the XML parser,
+we have provided a <a href="resources/cw-stag/src/test/java/edu/uob/ActionsFileTests.java" target="_blank">JUnit test class</a> for you to use.
+Not only will this test script verify that the actions file is readable, it ALSO provides a practical illustration of how to use of the JAXP library
+for parsing XML files.
+
+You may assume that all action files used during marking are in a valid format (our aim isn't to test the robustness of the parsing libraries).

@@ -1,0 +1,9 @@
+To ensure that the entities file is in the correct location in the project folder and that it can be accessed by the DOT parser,
+we have provided a <a href="resources/cw-stag/src/test/java/edu/uob/EntitiesFileTests.java" target="_blank">JUnit test class</a> for you to use.
+Not only will this test script verify that the entities file is readable, it ALSO provide a practical illustration of how to use of the JPGD library for parsing DOT files.
+
+You may assume that all entity files used during marking are in a valid format (our aim isn't to test the robustness of the parsing libraries).
+
+A `.jar` file containing the JPGD library can be found in the `libs` folder of the maven template.
+This _should_ already be part of the project dependencies, but it is useful to know where the library resides
+(Just in case you find that you have add it manually to your IntelliJ project).

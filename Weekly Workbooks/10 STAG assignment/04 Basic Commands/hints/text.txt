@@ -1,0 +1,1 @@
+Note that built-in commands are reserved words and therefore cannot be used as names for any other elements of the command language.

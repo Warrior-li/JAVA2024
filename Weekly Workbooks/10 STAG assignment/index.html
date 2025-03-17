@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>10 STAG assignment</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">10 STAG assignment</h1>
+</header>
+<h2 id="stag-assignment">STAG assignment</h2>
+<h3 id="task-1-introduction">Task 1: Introduction</h3>
+<p>This workbook introduces the final assignment that is worth the
+remaining 60% of the assessment for this unit. The focus of this
+assignment is the construction of a general-purpose socket-server
+game-engine for text adventure games. A typical game of this genre is
+‘Zork’ (illustrated in the screenshot shown below). The following
+sections of this workbook explain the construction of this Simple Text
+Adventure Game (STAG) in more detail and provide a breakdown of the
+features that you are required to implement. As usual, a
+<a href="resources/cw-stag/" target="_blank">maven template project</a>
+has been provided for you to help get you started in this
+assignment.</p>
+<p>Note that this assignment will be marked on the lab machines, so it
+is essential that you check that you can compile and run your code using
+Maven on these machines before submission.</p>
+<p>In order to identify the use of “derived” code (i.e. material “found”
+online or generated by AI), we will again make use of code similarity
+checking tools. Any code that has been determined to have been derived
+will be discounted during the marking process (resulting in a reduced
+final mark). Remember that you will only receive credit for code that
+YOU yourself have written.</p>
+<p>You are encouraged to talk about the assignments and discuss possible
+high-level implementation approaches with other students. HOWEVER it is
+<strong>essential</strong> that you protect your own work (and don’t
+share code with any other students). With this in mind, never exchange
+code with other students (via IM/email, GIT, forums, printouts, photos
+or any other means). If you ask a question on the unit discussion forum,
+try to keep discussion at a high level (i.e. not pasting in chunks of
+your code). If it is unavoidable to include code, only share small
+fragments of the essential sections you need assistance with. In
+addition, avoid the use of pair programming on this unit - you must
+produce all your own work ! Students submitting very similar work will
+be treated as collusion and will be dealt with using the university
+academic integrity processes.</p>
+<p><a href="http://www.web-adventures.org/cgi-bin/webfrotz?s=ZorkDungeon&n=4185" target="_blank">
+<img src="resources/zork.jpg"> </a></p>
+<h1 id="section"></h1>
+<h3 id="task-2-illegal-constructs">Task 2: Illegal Constructs</h3>
+<p>Each year we like to vary the nature of the coursework assignments a
+little (in order to avoid totally replicating assignments from previous
+years). In past years we have: adjusted the features that need to be
+implemented; adapted the testing mechanisms that must be used;
+prescribed specific development processes. In order to make this year’s
+assignments different, we need to find a new angle on creating
+“variation”. For this reason, we are introducing a set of “illegal
+constructs” - these are core features of the Java programming language,
+that you are NOT permitted to use in your code for this assignment. The
+illegal constructs for this year are as follows:</p>
+<ul>
+<li>Lambdas: Although lambdas <code>-&gt;</code> are a relative new and
+powerful feature of Java, you are not permitted to use them in this
+assignment. There are always alternatives to the use of lambdas -
+banning their use will encourage you to explore these alternatives.</li>
+<li>Arrays and ArrayLists: These are often the go-to data structures for
+many data manipulation activities. Banning their use will encourage you
+to explore a wider range of “exotic” data structures from the Java
+collections package. Note that you <em>may</em> use the
+<code>args</code> array that is passed into the main method (since this
+is embedded in the language itself) ! Where an API you have been asked
+to use returns an <code>ArrayList</code> from a method call, you should
+not store this object at all, but rather <em>immediate</em> request an
+iterator for that object.</li>
+<li>Ternary operators: These provide a shorthand for
+<code>if-then-else</code> control flow. We have banned their use because
+they can result in complex and potentially hard-to-read code. There are
+always alternatives to the use of ternary statements.</li>
+<li>Unqualified method calls: All methods must be called “on” an object
+(or a class). Skipping the object name is common practice when referring
+to the current object. This is however lazy programming, so you should
+ALWAYS call methods on <code>this</code> when invoking methods internal
+to an instance. For example, in your OXOController you would call
+<code>this.checkForWin()</code> rather than just
+<code>checkForWin()</code>.</li>
+<li>String concatenation: Joining strings together using the
+<code>+</code> operator is a common practice, however it can become
+inefficient when constructing complex strings (due to the overhead of
+implicit instantiation of intermediate String objects). We have banned
+the use of string concatenation in order to provide you with practice
+using more efficient string manipulation mechanisms (such as the
+<code>StringBuilder</code> class). Note that you may find the Java
+<code>printf</code> method useful for printing out strings without the
+need to use concatenation.</li>
+</ul>
+<p>The above constraints may well feel like frustrating obstacles to you
+implementing your solution, however each has (at least some)
+justification for being made illegal. It is good practice to gain
+experience developing code within language and stylistic constraints -
+it is rare that you have a totally free hand when implementing code in a
+real-world context.</p>
+<p>We do not really <em>want</em> to apply penalties to your mark, but
+rather we just want to <em>prevent</em> the use of the above constructs
+in the first place. In order to help you make sure that your code does
+not make use of any of the above illegal constructs, we have provided a
+source code checker for you to use. This checker is called
+<code>strange</code> (let’s just say that it looks for <em>strange</em>
+behaviour in your code). You can run this checker from the command line
+using the maven <code>exec</code> command. Note that checker will only
+check one source file at a time, so you will need to run it for each and
+every source file that you write. For example, to check the
+<code>GameServer</code> class, you would issue the command:</p>
+<pre><code>./mvnw exec:java@strange -Dexec.args=src/main/java/edu/uob/GameServer.java</code></pre>
+<p>or on windows:</p>
+<pre><code>mvnw exec:java@strange -Dexec.args=src\main\java\edu\uob\GameServer.java</code></pre>
+<p>We have left a few illegal constructs in the template
+<code>GameServer</code> class that we have given you, so that you can
+practice using the <code>strange</code> checker. If you run the above
+command, you should see a warning report similar to the one illustrated
+below. Note that you will need to replace the flagged constructs with
+legal code <em>before</em> you submit your final version to
+Blackboard.</p>
+<p><img src="02%20Illegal%20Constructs/images/warnings.jpg" /></p>
+<h1 id="section-1"></h1>
+<h3 id="task-3-game-engine">Task 3: Game Engine</h3>
+<p><a href='03%20Game%20Engine/video/adventure.mp4' target='_blank'>
+<img src="../../resources/icons/video.png" /> </a></p>
+<p>The aim of this assignment is to build a versatile game engine that
+it is able to play <em>any</em> text adventure game (providing that it
+conforms to certain rules). To support this versatility, two
+configuration files: <strong>entities</strong> and
+<strong>actions</strong> are used to describe the various “things” that
+are present in the game, their structural layout and their dynamic
+behaviours. These two configuration files are passed into the game
+server as parameters to the constructor method like so:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="fu">GameServer</span><span class="op">(</span><span class="bu">File</span> entitiesFile<span class="op">,</span> <span class="bu">File</span> actionsFile<span class="op">)</span></span></code></pre></div>
+<p>The server will load the game scenario in from the two configuration
+files, thus allowing a range of different games to be played. During the
+marking process, we will use some custom game files in order to explore
+the full range of functionality in your code. It is therefore essential
+that your game engine allows these files to be passed in and then reads
+and interprets their content (otherwise we won’t be able to test your
+code).</p>
+<p>Once the configuration files have been loaded, your server will
+listen for incoming connections from clients (in a similar way to the DB
+exercise). Again, the basic network operation has been provided for you
+in the template class. You will however need to add code to the
+<code>handleCommand</code> method so that it will: - receive an incoming
+command from a client - process the actions that have been requested -
+make changes to any game state that are required - finally send a
+suitable response message back to the client</p>
+<p>As with the DB assignment, you should build a robust and resilient
+server which will be able to keep running, no matter what commands the
+user throws at it. Note that <em>unlike</em> the DB assignment however,
+game state must NOT be made persistent between server invocations. When
+the server starts up, the game state should be loaded in from the
+<em>original</em> config files (do NOT update these with changes as the
+game progresses). The server should NOT remember the state of any
+previous games, but should start afresh each time the server is run.</p>
+<p>As with the DB exercise, a client has been provided for you for
+manual testing purposes. It is again essential that you do not implement
+any features inside the client class (since this file will be discarded
+and replaced by an automated test script during the marking
+process).</p>
+<p>To execute the server from the command line, type
+<code>mvnw exec:java@server</code>. To execute the client that will
+connect to the server, open up a NEW terminal window and type
+<code>mvnw exec:java@client -Dexec.args="simon"</code> The
+<code>-Dexec.args</code> flag allows us to pass an argument into the
+client (in this case the username of the current player).</p>
+<p>This username is then passed by the client to the server at the start
+of each command (so the server knows which player the command came
+from). The client is provided for manual exploration and demonstration
+purposes - most of the time you will run your code using a JUnit test
+script using <code>mvnw test</code> (or the green “run test” button from
+inside IntelliJ).</p>
+<p>The video linked to at the top of this section provides a
+demonstration of a typical game session (from the perspective of the
+client). Note that there is no audio track in this video - it is just a
+visual illustration.</p>
+<p><strong>Hints &amp; Tips:</strong><br />
+Note that some command line interpreters have difficult parsing command
+line parameters. If you run into problems running the client from your
+command line, try adding a space after the <code>-D</code> flag, for
+example: <code>mvnw exec:java@client -D exec.args="simon"</code></p>
+<h1 id="section-2"></h1>
+<h3 id="task-4-basic-commands">Task 4: Basic Commands</h3>
+<p>In order to communicate with the server, we need an agreed language
+(otherwise the user won’t know what to type to interact with the game
+!). There are a number of standard “built-in” gameplay commands that
+your game engine should respond to:</p>
+<ul>
+<li><code>inventory</code> (or <code>inv</code> for short) lists all of
+the artefacts currently being carried by the player</li>
+<li><code>get</code> picks up a specified artefact from the current
+location and adds it into player’s inventory</li>
+<li><code>drop</code> puts down an artefact from player’s inventory and
+places it into the current location</li>
+<li><code>goto</code> moves the player from the current location to the
+specified location (provided that there is a path to that location
+!)</li>
+<li><code>look</code> prints details of the current location (including
+all entities present) and lists the paths to other locations</li>
+</ul>
+<p>It is essential that you conform to this standard set of commands,
+otherwise it will not be possible to play your game (and your game
+engine will fail many of the marking tests !). To illustrate these
+commands in use (and to demonstrate the expected responses) a few
+examples are included in an example test script that can be found in the
+maven project’s test folder.</p>
+<p>In addition to these standard “built-in” commands, it is possible to
+extend a game with additional “custom” game-specific
+<strong>actions</strong>. These will be introduced in more detail in a
+later section of this workbook.</p>
+<p><strong>Hints &amp; Tips:</strong><br />
+Note that built-in commands are reserved words and therefore cannot be
+used as names for any other elements of the command language.</p>
+<h1 id="section-3"></h1>
+<h3 id="task-5-game-entities">Task 5: Game Entities</h3>
+<p>Game <strong>entities</strong> are a fundamental building block of
+any text adventure game. They are used to represent a wide range of
+different “things” that exist within a game including:</p>
+<ul>
+<li>Characters: Various creatures, animals, robots or people involved in
+game</li>
+<li>Players: A special kind of character that represents the user who is
+playing the game</li>
+<li>Locations: Rooms, environments or places that are present within the
+game</li>
+<li>Artefacts: Physical things within the game that can be collected by
+the player</li>
+<li>Furniture: Physical things that are an integral part of a location
+(which CANNOT be collected)</li>
+</ul>
+<p>It is worth noting that <strong>locations</strong> are complex
+constructs in their own right and have various different attributes
+including: - Paths to other locations (note: it is possible for paths to
+be one-way !) - Characters that are currently at a location - Artefacts
+that are currently present in a location - Furniture that belongs within
+a particular location</p>
+<p>Entities are defined in one of the game configuration files using a
+language called ‘DOT’. This language can be used to express the
+structure of a graph (which is basically what a text adventure game
+fundamentally is !)</p>
+<p>The big benefit of using DOT files to store game entities is that we
+can render them graphically using existing visualisation tools (such as
+<a href="https://dreampuf.github.io/GraphvizOnline/" target="_blank">this</a>).
+These tools allow us to actually SEE the structure of the game
+configuration (for example, see the graphical representation of one of
+the entity files shown in the diagram below). As you can see, each
+location is represented as a rectangular box containing a number of
+different entities (each type of entity being represented by a different
+shape). The paths between locations are presented in the form of
+directed “arrows” (what Computer Scientists call ‘edges’).</p>
+<p><img src="05%20Game%20Entities/images/basic-entities.png" /></p>
+<h1 id="section-4"></h1>
+<h3 id="task-6-loading-entities">Task 6: Loading Entities</h3>
+<p>We have provided a couple of example entity files to help you in your
+development work. Firstly there is a
+<a href="resources/cw-stag/config/basic-entities.dot" target="_blank">basic
+entities file</a> to help get you started in constructing your game
+engine. We have also provided an
+<a href="resources/cw-stag/config/extended-entities.dot" target="_blank">extended
+entities file</a> that can be used for more extensive testing during the
+later stages of your work.</p>
+<p>You already have much experience of writing parsers from previous
+exercises (both on this unit and others). We don’t really want to cover
+old ground, so for this assignment you will NOT be required to build
+your own parser. Instead, you are able to use existing parsing libraries
+for reading in the configuration files. This in itself if a useful
+learning opportunity - there is considerable educational value in
+learning to use existing libraries and frameworks in this way.</p>
+<p>With this in mind, you should use the
+<a href="http://www.alexander-merz.com/graphviz/doc/com/alexmerz/graphviz/Parser.html" target="_blank">JPGD
+parser</a> in order to parse the entity DOT files. Use this library to
+extract a set of
+<a href="http://www.alexander-merz.com/graphviz/doc/com/alexmerz/graphviz/objects/package-summary.html" target="_blank">GraphViz
+Objects</a> from the entities file and then store them in a suitable
+data structure in-memory so that your server can access them. We have
+provided you with an abstract <code>GameEntity</code> class in the maven
+project that you might like use to represent entities within your game.
+You may wish to write additional concrete subclasses that inherit from
+this abstract class in order to represent specific types of entity.</p>
+<p>All entities will need <em>at least</em> a name and a description,
+some may need additional attributes as well. To make the assignment a
+little easier, entity names cannot contain spaces (the DOT parser
+doesn’t like it if they do !). In addition to this, entity names defined
+within the configuration files will also be unique. You won’t have to
+deal with two things called <code>door</code> (although your might see a
+<code>trapdoor</code> and a <code>frontdoor</code>). As such, you can
+safely use entity names as unique identifiers. In addition to this,
+entity objects should be unique within the game (for example, there
+should only ever be one instance of the “axe” entity).</p>
+<p>It is worth noting that every game has a “special” location that is
+the starting point for each player adventure. The start location can be
+called anything we like, however it will <em>always</em> be the
+<strong>first</strong> location that appears in the
+<strong>entities</strong> file.</p>
+<p>Note that the <code>locations</code> subgraph will <em>always</em> be
+<strong>first</strong> in the entities file and the <code>paths</code>
+subgraph will <em>always</em> appear <strong>after</strong> the
+locations (the DOT parser doesn’t like it if we switch this ordering
+!)</p>
+<p>Finally, there is another special location called
+<code>storeroom</code> that can be found in the entities file. This
+location does not appear in the game world (there will be no paths
+to/from it). The <code>storeroom</code> is a container for all of the
+entities that have no initial location in the game. Everything needs to
+exist somewhere in the game structure (so that they can be defined in
+the entities file). These entities will not enter the game until an
+action places them into another location within the game. There will
+<em>usually</em> be a <code>storeroom</code> location in the
+<strong>entities</strong> file - since often there are unplaced entities
+at the start of the game. (and the game writer will need to put them
+somewhere in the <strong>entities</strong> file). If there isn’t a
+<code>storeroom</code> location defined (maybe the game writer forgot or
+didn’t need it), then your server should create one automatically.</p>
+<p><strong>Hints &amp; Tips:</strong><br />
+To ensure that the entities file is in the correct location in the
+project folder and that it can be accessed by the DOT parser, we have
+provided a
+<a href="resources/cw-stag/src/test/java/edu/uob/EntitiesFileTests.java" target="_blank">JUnit
+test class</a> for you to use. Not only will this test script verify
+that the entities file is readable, it ALSO provide a practical
+illustration of how to use of the JPGD library for parsing DOT
+files.</p>
+<p>You may assume that all entity files used during marking are in a
+valid format (our aim isn’t to test the robustness of the parsing
+libraries).</p>
+<p>A <code>.jar</code> file containing the JPGD library can be found in
+the <code>libs</code> folder of the maven template. This <em>should</em>
+already be part of the project dependencies, but it is useful to know
+where the library resides (Just in case you find that you have add it
+manually to your IntelliJ project).</p>
+<h1 id="section-5"></h1>
+<h3 id="task-7-game-actions">Task 7: Game Actions</h3>
+<p>In addition to the standard “built-in” commands
+(e.g. <code>get</code>, <code>goto</code>, <code>look</code> etc.), your
+game engine should also respond to any of a number of game-specific
+“custom” commands (as specified in the <strong>actions</strong> file).
+Each of these <strong>actions</strong> will have the following
+elements:</p>
+<ul>
+<li>One or more possible <strong>trigger</strong> phrases (ANY of which
+can be used to initiate the action)</li>
+<li>One or more <strong>subject</strong> entities that are acted upon
+(ALL of which need to be “available” to perform the action)</li>
+<li>An optional set of <strong>consumed</strong> entities that are all
+removed (“eaten up”) by the action</li>
+<li>An optional set of <strong>produced</strong> entities that are all
+created (“generated”) by the action</li>
+<li>A <strong>narration</strong> that provides a human-readable
+explanation of what happened when the action is performed</li>
+</ul>
+<p>Note that being “available” requires the entity to be <em>either</em>
+in the inventory of the player invoking the action <em>or</em> for that
+entity to be in the room/location where the action is being performed.
+This feature is intended to be a shortcut so that a player can use an
+entity in their current location <em>without</em> having to explicitly
+pick it up first. Any type of entity can be the ‘subject’ of an action
+(artefacts, locations, characters, furniture etc).</p>
+<p>It is worth noting that action trigger keyphrases are NOT unique -
+for example there may be multiple “open” actions that act on different
+entities. Note that trigger phrases cannot (and will not) contain the
+names of entities, since this would make incoming commands far too
+difficult to interpret. Just consider the challenge of trying to
+interpret the command: <code>lock lock with key</code>.</p>
+<p>Upon receiving an action command, your server should attempt to find
+an appropriate matching action. Note that the action is only valid if
+ALL <strong>subject</strong> entities (as specified in the actions file)
+are available to the player. If a valid action is found, your server
+must undertake the relevant additions/removals
+(production/consumption).</p>
+<p>When an entity is <em>produced</em>, it should be moved from its
+current location in the game (which might be in the
+<code>storeroom</code>) to the location in which the action was trigged.
+The entity should NOT automatically appear in a players inventory - it
+might be furniture (which the player can’t carry) or it might be an
+artefact they don’t actually want to pick up !</p>
+<p>When an entity is <em>consumed</em> it should be removed from its
+current location (which could be any location within the game) and moved
+into the <code>storeroom</code> location. If the game writer wants to
+enforce co-location (i.e. that the consumed entity must be in the same
+location as the player) then they must include that entity as a
+<strong>subject</strong> of the action.</p>
+<p>Note that it is NOT possible to perform an action where any subject,
+consumed entity or produced entity is currently in <em>another</em>
+player’s inventory. You should consider these entities “out of bounds”
+and not available to a player who does not currently hold that artefact.
+You can’t unlock a door if another player has the key !</p>
+<p>Locations can be used as subjects as well as being consumed and
+produced entities of an action (just like other entities). Consumed
+locations however are not moved to the storeroom - instead, the path
+between the current location and consumed location is removed (there may
+still be other paths to that location in other game locations). For
+produced locations, a new (one-way) path is added from the current
+location to the “produced” location.</p>
+<h1 id="section-6"></h1>
+<h3 id="task-8-loading-actions">Task 8: Loading Actions</h3>
+<p>We have provided some example action files for you to use in your
+project. Firstly there is a
+<a href="resources/cw-stag/config/basic-actions.xml" target="_blank">basic
+actions file</a> to help get you started in constructing your game
+engine. We have also provided an
+<a href="resources/cw-stag/config/extended-actions.xml" target="_blank">extended
+actions file</a> that can be used for more extensive testing during the
+later stages of your work.</p>
+<p>Both of these documents are written in eXtensible Markup Language
+(XML). In order to successfully parse these XML files, you should use
+the Java API for XML Processing (JAXP). In particular, you should make
+use of the
+<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/parsers/DocumentBuilder.html" target="_blank">DocumentBuilder</a>
+class as well as various classes from the
+<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/org/w3c/dom/package-summary.html" target="_blank">org.w3c.dom</a>
+package. See the “Hints and Tips” section of this task for an example of
+how to use these classes.</p>
+<p>Once loaded in from the XML file, you should store the actions in a
+suitable in-memory data structure so that your server can access them
+quickly and easily.</p>
+<p><strong>Hints &amp; Tips:</strong><br />
+To ensure that the basic actions file is in the correct location in the
+project folder and that it can be accessed by the XML parser, we have
+provided a
+<a href="resources/cw-stag/src/test/java/edu/uob/ActionsFileTests.java" target="_blank">JUnit
+test class</a> for you to use. Not only will this test script verify
+that the actions file is readable, it ALSO provides a practical
+illustration of how to use of the JAXP library for parsing XML
+files.</p>
+<p>You may assume that all action files used during marking are in a
+valid format (our aim isn’t to test the robustness of the parsing
+libraries).</p>
+<h1 id="section-7"></h1>
+<h3 id="task-9-command-flexibility">Task 9: Command Flexibility</h3>
+<p>Interpreting the input from users in this assignment is very
+different from dealing with queries in the DB exercise. The simplified
+SQL that we used for the last assignment was limited, rigid and
+constrained. As such, it was possible to write a reasonably concise BNF
+grammar to define the entire language. The same is not true for natural
+language, which is very complex, permits much variation and is used
+diversely (depending on the speaker/writer). The best we can hope do is
+to try to make our command interpreter as flexible and versatile as
+possible - in order to cope with most eventualities. Below are various
+features your should implement in your interpreter to support such
+flexibility:</p>
+<p><strong>Case Insensitivity</strong><br />
+All commands (including entity names, locations, built-in commands and
+action triggers) should be treated as case insensitive. This ensures
+that, no matter what capitalisation a player chooses to use in their
+commands, the server will be able in interpret their intensions. For
+this reason, it is not possible for the configuration files to contain
+two different things with the same name, but different capitalisation
+(e.g. there cannot be a <code>door</code> and a <code>DOOR</code> in the
+same game)</p>
+<p><strong>Decorated Commands</strong><br />
+In order to support command variability, your interpreter should be able
+to cope with additional “decorative” words being inserted into a
+command. For example, the basic command <code>chop tree with axe</code>
+might well be entered by the user as
+<code>please chop the tree using the axe</code>. Both versions are
+equivalent and should both be accepted by your command interpreter.</p>
+<p><strong>Word Ordering</strong><br />
+The ordering of the words in a command should not effect the server’s
+ability to find appropriate matching actions. For example
+<code>chop tree with axe</code> and <code>use axe to chop tree</code>
+are equivalent and should both be accepted by your command
+interpreter.</p>
+<p><strong>Partial Commands</strong><br />
+To further support flexible natural language communication, your server
+should be able to operate with shortened, “partial” commands. It is
+convenient for the user to be able to omit <em>some</em> of the subjects
+from a command, whilst still providing enough information for the
+correct action to be identified. For example, the command
+<code>unlock trapdoor with key</code> could alternatively be entered as
+<em>either</em> <code>unlock trapdoor</code> <em>or</em>
+<code>unlock with key</code> - both of which provide enough detail for
+an action match to be attempted. In order to stand a chance of matching
+a command to an action, each incoming command MUST contain a trigger
+phrase and <em>at least</em> one subject. Anything less than this and
+the intended action will probably be too vague to identify, so should be
+rejected by your command interpreter.</p>
+<p><strong>Extraneous Entities</strong><br />
+When searching for an action, you must match ALL of the subjects that
+are specified in the incoming command
+(e.g. <code>repair door with hammer and nails</code>). Extraneous
+entities included within an incoming command (i.e. entities that are in
+the incoming command, but not specified in the action file) should
+prevent a match from being made. This is to prevent the user attempting
+to perform actions with inappropriate entities
+(e.g. <code>open potion with hammer</code> should not succeed).
+Similarly, specifying extraneous entities for built-in command
+(e.g. <code>get key from forest</code>) should not be permitted. The
+rational for this is that it could be problematic for your command
+interpreter to determine which entity to perform the built-in command
+upon if there is more than one in the command.</p>
+<p><strong>Ambiguous Commands</strong><br />
+Much of the above “fuzzy” matching of actions is risky - there may be
+situations where <em>more than one</em> action matches a particular
+command. If a particular command is ambiguous (i.e. there is <em>more
+than one</em> <strong>valid</strong> and <strong>performable</strong>
+action possible) then NO action should be performed and a suitable
+warning message sent back to the user
+(e.g. <code>there is more than one 'open' action possible - which one do you want to perform ?</code>)</p>
+<p><strong>Composite Commands</strong><br />
+Composite commands (commands involving more than one activity) should
+NOT be supported. Users are unable to use commands such as
+<code>get axe and coin</code>, <code>get key and open door</code> or
+<code>open door and potion</code>. A single command can only be used to
+perform a single built-in command or single custom game action.</p>
+<p><strong>Error messages</strong><br />
+Note that due to the range of possible response messages it is possible
+to return to the user, we will not test for specific error/anomaly
+messages. Rather, we will check the underlying game state using the
+standard built-in commands (<code>look</code>, <code>inv</code> etc) in
+order to check that inappropriate actions have not been performed by
+your server. That said, we still encourage you to return suitable error
+messages to the user for the sake of playability of your game.</p>
+<p>Although there is much flexibility and variability in the command
+language, the test cases we will use during the marking process will
+focus upon testing user input that is “fair and reasonable”. We are
+interested in assessing the ability of the command interpreter to detect
+valid, sensible and likely inputs from the user. This requires the user
+to provide enough information to allow the interpreter to uniquely
+identify an action, whilst at the same time giving them some flexibility
+about how they go about expressing the command. We aren’t looking for
+the ability of the interpreter to deal with illogical or silly commands.
+We just want to avoid the situation where the user thinks: “That was a
+fair command, why won’t it understand me”. If the user types something
+weird and strange they shouldn’t be surprised if something weird and
+strange happens as a consequence.</p>
+<h1 id="section-8"></h1>
+<h3 id="task-10-multiple-players">Task 10: Multiple Players</h3>
+<p>If you are feeling ambitious, extend your game so that it is able to
+operate with more than just a single player. In order to support this
+feature, incoming command messages begin with the username of the player
+who issued that command. For example, a “full” incoming message might
+therefore take the form of:</p>
+<pre><code>simon: open door with key</code></pre>
+<p>Where everything <em>before</em> the first <code>:</code> is the
+player’s name and everything <em>after</em> is the command itself. Valid
+player names can consist of uppercase and lowercase letters, spaces,
+apostrophes and hyphens. No other characters are valid and if they
+occur, a suitable error message should be returned to the user.</p>
+<p>Note that there is no “formal” player registration process - when the
+server encounters a command from a previously unseen user, a new player
+should be created and placed in the start location of the game. There is
+no need for your server to implement any form of authentication - you
+can assume that the client handles this responsibility. Your server
+should simply trust any commands that purport to come from a particular
+user. This may seem unsafe, however this is intended to limit the scope
+and complexity of this assignment.</p>
+<p>It is essential that when an incoming message is received, the
+command is applied to the <em>correct</em> player. To achieve this, you
+will need to maintain <em>some</em> elements of game state
+<em>separately</em> for each individual player. For example, each player
+may be in a different location in the game and will carry their own
+inventory of artefacts.</p>
+<p>One final thing to remember is that you should include <em>other</em>
+players in your description of a location when a <code>look</code>
+command is issued by a user. There is no point having multiple players
+in the game if they can’t actually <em>see</em> each other ! Note that
+even though they can see each other, human players cannot interact
+directly. This is because, due to the dynamic nature of player naming,
+it is not possible to write action rules involving player identifiers
+(since a game writer can’t predict what usernames players are going to
+choose in advance of the game being played !).</p>
+<h1 id="section-9"></h1>
+<h3 id="task-11-player-health">Task 11: Player Health</h3>
+<p>As an extension to the basic game, you might like to add a “health
+level” feature. Each player should start with the maximum health level
+of 3. Consumption of “Poisons &amp; Potions” or interaction with
+beneficial or dangerous characters will increase or decrease a player’s
+health by one point. You will see in the
+<a href="resources/cw-stag/config/extended-actions.xml" target="_blank">extended
+actions file</a> the use of the <code>health</code> keyword in the
+<code>produced</code> and <code>consumed</code> fields. These indicate
+actions which increase and decrease your health by one unit. Note that
+although a player’s health can never increase above the maximum (i.e. 3)
+actions producing health are still <em>performable</em> but they will
+have no effect on the player’s health level.</p>
+<p>When a player’s health runs out (i.e. when it becomes zero) they
+should lose all of the items in their inventory (which are dropped in
+the location where they ran out of health). The player should then be
+transported to the start location of the game and their health level
+restored to full (i.e. 3). You might also like to send a suitable
+message to the user, for example:</p>
+<pre><code>you died and lost all of your items, you must return to the start of the game</code></pre>
+<p>It is important that you should not reset the whole game state when
+one player dies (for example, previously opened location paths should
+still exist). You should remember that there may be more than one player
+of the game - they shouldn’t see their world change just because another
+player has died.</p>
+<p>In order to fully support these features in your game engine, you
+should implement a new <code>health</code> built-in command, so that the
+player can keep track of their current health level. Upon receiving a
+<code>health</code> command from a user, the server should report back
+the player’s current health level (as a number).</p>
+<h1 id="section-10"></h1>
+<h3 id="task-12-marking">Task 12: Marking</h3>
+<p>Note that this is an individual assignment, not a group activity !
+Automated checkers will be used to flag partly (or fully) duplicate
+submissions from students in this year’s cohort. If markers feel that
+collusion between students has taken place, the incident will be
+referred to an academic malpractice panel. The outcome of this panel may
+be a mark of zero for assignment or even the entire unit (if it is a
+repeat offence).</p>
+<p>For consistency and compatibly with all test cases, it is essential
+that you adhere to the gameplay commands detailed in this workbook. You
+should also ensure that you do not change the name of your main class -
+it must be called <code>GameServer</code>. If you change the name of the
+class (or the <code>handleCommand</code> method) the marking script will
+not be able to test your code ! It is <strong>ESSENTIAL</strong> that
+you check your code still passes the original test script provided as
+part of the maven project. If your code does not pass these basic tests,
+then it is likely your code will not pass any of the final marking
+tests.</p>
+<p>Make sure your code does not contain anything specific to your
+computer (e.g. absolute file paths, operating system specific code etc).
+Before submitting your code, we advise you to test your project on a
+computer <em>other than the one it was developed on</em> (e.g. a lab
+machine). Clear out all temporary files and then ensure the code
+compiles and runs correctly using Maven. We will apply a penalty mark if
+we cannot run your code “out of the box” - we can’t spend time fixing
+everyones projects before we mark them !</p>
+<p>Note that the “quality” of your code will be taken into account when
+assessing your work. The code quality metrics outlined earlier in this
+unit will be used to derive your final mark. It is important therefore
+that you adhere to the structure and style guidelines outlined in the
+“code quality” workbook. It is also essential that you take heed of the
+quality feedback you have received for previous exercises, since this
+will help you improve your work - not just for this exercise, but in the
+long term.</p>
+<p>Remember that your code MUST NOT use any of the banned “illegal”
+language constructs (namely: Lambdas, Arrays, ArrayLists, Ternary
+operators, Unqualified method calls, String concatenation). If you do
+use any of these illegal constructs in your submission, your assignment
+will receive a mark of zero ! Remember to use the <code>strange</code>
+tool to check that your source code does not make use of any illegal
+constructs.</p>
+<p>Finally, remember that we will use automated analysis tools to
+determine “derived” code (material “found” online or generated by AI).
+You will only receive credit for code that YOU yourself have
+written.</p>
+<h1 id="section-11"></h1>
+</body>
+</html>

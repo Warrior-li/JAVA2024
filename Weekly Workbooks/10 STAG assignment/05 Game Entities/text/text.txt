@@ -1,0 +1,26 @@
+Game **entities** are a fundamental building block of any text adventure game.
+They are used to represent a wide range of different "things" that exist within a game including:
+
+- Characters: Various creatures, animals, robots or people involved in game
+- Players: A special kind of character that represents the user who is playing the game
+- Locations: Rooms, environments or places that are present within the game
+- Artefacts: Physical things within the game that can be collected by the player
+- Furniture: Physical things that are an integral part of a location (which CANNOT be collected)
+
+It is worth noting that **locations** are complex constructs in their own right and
+have various different attributes including:
+- Paths to other locations (note: it is possible for paths to be one-way !)
+- Characters that are currently at a location
+- Artefacts that are currently present in a location
+- Furniture that belongs within a particular location
+
+Entities are defined in one of the game configuration files using a language called 'DOT'.
+This language can be used to express the structure of a graph (which is basically what a text adventure game fundamentally is !)
+
+The big benefit of using DOT files to store game entities is that we can render them graphically
+using existing visualisation tools (such as <a href="https://dreampuf.github.io/GraphvizOnline/" target="_blank">this</a>).
+These tools allow us to actually SEE the structure of the game configuration
+(for example, see the graphical representation of one of the entity files shown in the diagram below).
+As you can see, each location is represented as a rectangular box containing a number of different entities
+(each type of entity being represented by a different shape). The paths between locations are
+presented in the form of directed "arrows" (what Computer Scientists call 'edges').

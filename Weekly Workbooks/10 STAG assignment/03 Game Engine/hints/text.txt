@@ -1,0 +1,3 @@
+Note that some command line interpreters have difficult parsing command line parameters.
+If you run into problems running the client from your command line, try adding a space after the `-D` flag, for example:
+`mvnw exec:java@client -D exec.args="simon"`
