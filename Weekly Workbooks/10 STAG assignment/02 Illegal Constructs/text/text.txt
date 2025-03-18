@@ -1,0 +1,29 @@
+Each year we like to vary the nature of the coursework assignments a little (in order to avoid totally replicating assignments from previous years).
+In past years we have: adjusted the features that need to be implemented; adapted the testing mechanisms that must be used; prescribed specific development processes.
+In order to make this year's assignments different, we need to find a new angle on creating "variation".
+For this reason, we are introducing a set of "illegal constructs" - these are core features of the Java programming language,
+that you are NOT permitted to use in your code for this assignment. The illegal constructs for this year are as follows:
+
+- Lambdas: Although lambdas `->` are a relative new and powerful feature of Java, you are not permitted to use them in this assignment. There are always alternatives to the use of lambdas - banning their use will encourage you to explore these alternatives.
+- Arrays and ArrayLists: These are often the go-to data structures for many data manipulation activities. Banning their use will encourage you to explore a wider range of "exotic" data structures from the Java collections package. Note that you _may_ use the `args` array that is passed into the main method (since this is embedded in the language itself) ! Where an API you have been asked to use returns an `ArrayList` from a method call, you should not store this object at all, but rather _immediate_ request an iterator for that object.
+- Ternary operators: These provide a shorthand for `if-then-else` control flow. We have banned their use because they can result in complex and potentially hard-to-read code. There are always alternatives to the use of ternary statements.
+- Unqualified method calls: All methods must be called "on" an object (or a class). Skipping the object name is common practice when referring to the current object. This is however lazy programming, so you should ALWAYS call methods on `this` when invoking methods internal to an instance. For example, in your OXOController you would call `this.checkForWin()` rather than just `checkForWin()`.
+- String concatenation: Joining strings together using the `+` operator is a common practice, however it can become inefficient when constructing complex strings (due to the overhead of implicit instantiation of intermediate String objects). We have banned the use of string concatenation in order to provide you with practice using more efficient string manipulation mechanisms (such as the `StringBuilder` class). Note that you may find the Java `printf` method useful for printing out strings without the need to use concatenation.
+
+The above constraints may well feel like frustrating obstacles to you implementing your solution, however each has (at least some) justification for being made illegal.
+It is good practice to gain experience developing code within language and stylistic constraints - it is rare that you have a totally free hand when implementing code in a real-world context.
+
+We do not really _want_ to apply penalties to your mark, but rather we just want to _prevent_ the use of the above constructs in the first place.
+In order to help you make sure that your code does not make use of any of the above illegal constructs, we have provided a source code checker for you to use. This checker is called `strange` (let's just say that it looks for *strange* behaviour in your code). You can run this checker from the command line using the maven `exec` command.
+Note that checker will only check one source file at a time, so you will need to run it for each and every source file that you write.
+For example, to check the `GameServer` class, you would issue the command:
+```
+./mvnw exec:java@strange -Dexec.args=src/main/java/edu/uob/GameServer.java
+```
+or on windows:
+```
+mvnw exec:java@strange -Dexec.args=src\main\java\edu\uob\GameServer.java
+```
+We have left a few illegal constructs in the template `GameServer` class that we have given you, so that you can practice using the `strange` checker.
+If you run the above command, you should see a warning report similar to the one illustrated below.
+Note that you will need to replace the flagged constructs with legal code *before* you submit your final version to Blackboard.

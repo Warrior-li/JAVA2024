@@ -1,0 +1,15 @@
+We have provided some example action files for you to use in your project.
+Firstly there is a <a href="resources/cw-stag/config/basic-actions.xml" target="_blank">basic actions file</a>
+to help get you started in constructing your game engine.
+We have also provided an <a href="resources/cw-stag/config/extended-actions.xml" target="_blank">extended actions file</a>
+that can be used for more extensive testing during the later stages of your work.
+
+Both of these documents are written in eXtensible Markup Language (XML).
+In order to successfully parse these XML files, you should use the Java API for XML Processing (JAXP).
+In particular, you should make use of the
+<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/parsers/DocumentBuilder.html" target="_blank">DocumentBuilder</a>
+class as well as various classes from the 
+<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/org/w3c/dom/package-summary.html" target="_blank">org.w3c.dom</a> package.
+See the "Hints and Tips" section of this task for an example of how to use these classes.
+
+Once loaded in from the XML file, you should store the actions in a suitable in-memory data structure so that your server can access them quickly and easily.

@@ -1,0 +1,64 @@
+Interpreting the input from users in this assignment is very different from dealing with queries in the DB exercise.
+The simplified SQL that we used for the last assignment was limited, rigid and constrained.
+As such, it was possible to write a reasonably concise BNF grammar to define the entire language.
+The same is not true for natural language, which is very complex, permits much variation and is used diversely (depending on the speaker/writer).
+The best we can hope do is to try to make our command interpreter as flexible and versatile as possible - in order to cope with most eventualities.
+Below are various features your should implement in your interpreter to support such flexibility:
+
+**Case Insensitivity**  
+All commands (including entity names, locations, built-in commands and action triggers) should be treated as case insensitive.
+This ensures that, no matter what capitalisation a player chooses to use in their commands, the server will be able in interpret their intensions.
+For this reason, it is not possible for the configuration files to contain two different things with the same name, but different capitalisation
+(e.g. there cannot be a `door` and a `DOOR` in the same game)
+
+**Decorated Commands**  
+In order to support command variability, your interpreter should be able to cope with additional "decorative" words being inserted into a command.
+For example, the basic command `chop tree with axe` might well be entered by the user as `please chop the tree using the axe`.
+Both versions are equivalent and should both be accepted by your command interpreter.
+
+**Word Ordering**  
+The ordering of the words in a command should not effect the server's ability to find appropriate matching actions.
+For example `chop tree with axe` and `use axe to chop tree` are equivalent and should both be accepted by your command interpreter.
+
+**Partial Commands**  
+To further support flexible natural language communication, your server should be able to operate with shortened, "partial" commands.
+It is convenient for the user to be able to omit _some_ of the subjects from a command, whilst still providing enough information for
+the correct action to be identified.
+For example, the command `unlock trapdoor with key` could alternatively be entered as _either_ `unlock trapdoor` _or_ `unlock with key` -
+both of which provide enough detail for an action match to be attempted.
+In order to stand a chance of matching a command to an action, each incoming command MUST contain a trigger phrase and _at least_ one subject.
+Anything less than this and the intended action will probably be too vague to identify, so should be rejected by your command interpreter.
+
+**Extraneous Entities**  
+When searching for an action, you must match ALL of the subjects that are specified in the incoming command (e.g. `repair door with hammer and nails`).
+Extraneous entities included within an incoming command (i.e. entities that are in the incoming command, but not specified in the action file)
+should prevent a match from being made. This is to prevent the user attempting to perform actions with inappropriate entities
+(e.g. `open potion with hammer` should not succeed). Similarly, specifying extraneous entities for built-in command (e.g. `get key from forest`)
+should not be permitted. The rational for this is that it could be problematic for your command interpreter to determine which entity to perform
+the built-in command upon if there is more than one in the command.
+
+**Ambiguous Commands**  
+Much of the above "fuzzy" matching of actions is risky - there may be situations where _more than one_ action matches a particular command.
+If a particular command is ambiguous (i.e. there is _more than one_ **valid** and **performable** action possible)
+then NO action should be performed and a suitable warning message sent back to the user
+(e.g. `there is more than one 'open' action possible - which one do you want to perform ?`)
+
+**Composite Commands**  
+Composite commands (commands involving more than one activity) should NOT be supported.
+Users are unable to use commands such as `get axe and coin`, `get key and open door` or `open door and potion`.
+A single command can only be used to perform a single built-in command or single custom game action.
+
+**Error messages**  
+Note that due to the range of possible response messages it is possible to return to the user, we will not test for specific error/anomaly messages.
+Rather, we will check the underlying game state using the standard built-in commands (`look`, `inv` etc) in order to check that inappropriate actions have not
+been performed by your server. That said, we still encourage you to return suitable error messages to the user for the sake of playability of your game.
+
+Although there is much flexibility and variability in the command language, the test cases we will use during the marking process
+will focus upon testing user input that is "fair and reasonable".
+We are interested in assessing the ability of the command interpreter to detect valid, sensible and likely inputs from the user.
+This requires the user to provide enough information to allow the interpreter to uniquely identify an action,
+whilst at the same time giving them some flexibility about how they go about expressing the command.
+We aren't looking for the ability of the interpreter to deal with illogical or silly commands.
+We just want to avoid the situation where the user thinks: "That was a fair command, why won't it understand me".
+If the user types something weird and strange they shouldn't be surprised if something weird and strange happens as a consequence.
+

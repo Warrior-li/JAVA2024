@@ -1,0 +1,17 @@
+In order to communicate with the server, we need an agreed language
+(otherwise the user won't know what to type to interact with the game !).
+There are a number of standard "built-in" gameplay commands that your game engine should respond to:
+
+- `inventory` (or `inv` for short) lists all of the artefacts currently being carried by the player
+- `get` picks up a specified artefact from the current location and adds it into player's inventory
+- `drop` puts down an artefact from player's inventory and places it into the current location
+- `goto` moves the player from the current location to the specified location (provided that there is a path to that location !)
+- `look` prints details of the current location (including all entities present) and lists the paths to other locations
+
+It is essential that you conform to this standard set of commands, otherwise it will not be possible to play your game
+(and your game engine will fail many of the marking tests !). To illustrate these commands in use (and to demonstrate
+the expected responses) a few examples are included in an example test script that can be found in the maven project's test folder.
+
+In addition to these standard "built-in" commands, it is possible to extend a game with additional "custom" game-specific **actions**.
+These will be introduced in more detail in a later section of this workbook.
+
