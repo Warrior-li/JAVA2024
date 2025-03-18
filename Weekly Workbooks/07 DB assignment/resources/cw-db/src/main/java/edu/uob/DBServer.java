@@ -65,47 +65,48 @@ public class DBServer {
 
     //
     public String handleCommand(String command) {
-        // TODO implement your server logic here
         if (command == null || command.trim().isEmpty()) {
-            return "[ERROR] Get empty command";
+            return "[ERROR] Empty command received";
         }
+        // Trim and check that the command ends with a semicolon
         String trimmed = command.trim();
-        if(!trimmed.endsWith(";")){
-            return "[ERROR] Missing semicolon at the end of command";
+        if (!trimmed.endsWith(";")) {
+            return "[ERROR] Missing semicolon at the end of the command";
         }
-        // 去掉末尾分号后再 trim
+        // Remove the trailing semicolon and trim again
         trimmed = trimmed.substring(0, trimmed.length() - 1).trim();
-        // 为便于关键字判断，统一转换为大写（保留原始字符串以便提取值）
+        // For keyword comparisons, convert to uppercase but preserve the original for value extraction
         String upperCmd = trimmed.toUpperCase();
-
+        
         try {
-            // use 命令
+            // ----------------- USE Command -----------------
             if (upperCmd.startsWith("USE")) {
-                // 格式：USE database name;
+                // Format: USE databaseName;
                 String[] tokens = trimmed.split("\\s+");
                 if (tokens.length != 2) {
-                    return "[ERROR] USE Command format error";
+                    return "[ERROR] Incorrect USE command format";
                 }
                 String dbName = tokens[1].toLowerCase();
                 File dbDir = new File(manager.getStorageFolderPath(), dbName);
                 if (!dbDir.exists()) {
-                    return "[ERROR] 数据库不存在";
+                    return "[ERROR] Database does not exist";
                 }
-                // 设置当前数据库：更新 manager 的存储路径，并重新加载表数据
-                currentDatabase = dbName;  // currentDatabase 为 DBServer 内的字段
+                // Set current database: update manager storage path and reload tables
+                currentDatabase = dbName; // currentDatabase is a field in DBServer
                 manager.setStorageFolderPath(dbDir.getAbsolutePath());
                 tables = manager.loadAllTables();
                 return "[OK]";
             }
-            // create database
-            else if(upperCmd.startsWith("CREATE DATABASE")){
+            // ----------------- CREATE DATABASE Command -----------------
+            else if (upperCmd.startsWith("CREATE DATABASE")) {
+                // Format: CREATE DATABASE databaseName;
                 String[] tokens = trimmed.split("\\s+");
-                if(tokens.length != 3){
-                    return "[ERROR] CREATE DATABASE Command format error";
+                if (tokens.length != 3) {
+                    return "[ERROR] Incorrect CREATE DATABASE command format";
                 }
                 String dbName = tokens[2].toLowerCase();
                 File dbDir = new File(manager.getStorageFolderPath(), dbName);
-                if(dbDir.exists()){
+                if (dbDir.exists()) {
                     return "[ERROR] Database already exists";
                 }
                 if (dbDir.mkdir()) {
@@ -114,33 +115,40 @@ public class DBServer {
                     return "[ERROR] Failed to create database";
                 }
             }
-            // create table command
-            else if(upperCmd.startsWith("CREATE TABLE")){
-                // 格式：CREATE TABLE tableName (col1, col2, ...);
+            // ----------------- CREATE TABLE Command -----------------
+            else if (upperCmd.startsWith("CREATE TABLE")) {
+                // Format: CREATE TABLE tableName [(col1, col2, ...)];
                 int openParen = trimmed.indexOf("(");
                 int closeParen = trimmed.indexOf(")");
-                if (openParen < 0 || closeParen < 0 || closeParen < openParen) {
-                    return "[ERROR] CREATE TABLE Syntax Error";
-                }
-                String beforeParen = trimmed.substring(0, openParen).trim();
-                String[] tokens = beforeParen.split("\\s+");
-                if (tokens.length != 3) {
-                    return "[ERROR] CREATE TABLE Command format error";
-                }
-                String tableName = tokens[2].toLowerCase();
-                String colsPart = trimmed.substring(openParen + 1, closeParen).trim();
-                if (colsPart.isEmpty()) {
-                    return "[ERROR] No column name specified";
-                }
-                String[] cols = colsPart.split(",");
+                String tableName;
                 List<String> colList = new ArrayList<>();
-                for (String col : cols) {
-                    String colName = col.trim();
-                    // 检查是否为 SQL 保留关键字（这里可扩展检查）
-                    if (isReservedKeyword(colName)) {
-                        return "[ERROR] Column names cannot be reserved keywords: " + colName;
+                if (openParen == -1 || closeParen == -1) {
+                    // No parentheses: create an empty table (only id column)
+                    String[] tokens = trimmed.split("\\s+");
+                    if (tokens.length != 3) {
+                        return "[ERROR] Incorrect CREATE TABLE command format";
                     }
-                    colList.add(colName);
+                    tableName = tokens[2].toLowerCase();
+                } else {
+                    // Parentheses exist: parse the column list
+                    String beforeParen = trimmed.substring(0, openParen).trim();
+                    String[] tokens = beforeParen.split("\\s+");
+                    if (tokens.length != 3) {
+                        return "[ERROR] Incorrect CREATE TABLE command format";
+                    }
+                    tableName = tokens[2].toLowerCase();
+                    String colsPart = trimmed.substring(openParen + 1, closeParen).trim();
+                    if (colsPart.isEmpty()) {
+                        return "[ERROR] No columns specified";
+                    }
+                    String[] cols = colsPart.split(",");
+                    for (String col : cols) {
+                        String colName = col.trim();
+                        if (isReservedKeyword(colName)) {
+                            return "[ERROR] Column name cannot be a reserved keyword: " + colName;
+                        }
+                        colList.add(colName);
+                    }
                 }
                 if (tables.containsKey(tableName)) {
                     return "[ERROR] Table already exists";
@@ -150,28 +158,27 @@ public class DBServer {
                 manager.saveTable(table);
                 return "[OK]";
             }
-            // insert into
-             // ----------------- INSERT INTO 命令 -----------------
+            // ----------------- INSERT INTO Command -----------------
             else if (upperCmd.startsWith("INSERT INTO")) {
-                // 格式：INSERT INTO tableName VALUES (val1, val2, ...);
+                // Format: INSERT INTO tableName VALUES (val1, val2, ...);
                 int indexValues = upperCmd.indexOf("VALUES");
-                if (indexValues < 0) return "[ERROR] INSERT Syntax Error";
+                if (indexValues == -1) return "[ERROR] INSERT syntax error";
                 String beforeValues = trimmed.substring(0, indexValues).trim();
                 String[] tokens = beforeValues.split("\\s+");
-                if (tokens.length != 3) return "[ERROR] INSERT Command format error";
+                if (tokens.length != 3) return "[ERROR] Incorrect INSERT command format";
                 String tableName = tokens[2].toLowerCase();
                 Table table = tables.get(tableName);
-                if (table == null) return "[ERROR] Table is not exists";
-                int openParen = trimmed.indexOf("(", indexValues);
-                int closeParen = trimmed.indexOf(")", openParen);
-                if (openParen < 0 || closeParen < 0) return "[ERROR] INSERT Syntax Error";
+                if (table == null) return "[ERROR] Table does not exist";
+                int openParen = trimmed.indexOf('(', indexValues);
+                int closeParen = trimmed.indexOf(')', openParen);
+                if (openParen == -1 || closeParen == -1) return "[ERROR] INSERT syntax error";
                 String valuesPart = trimmed.substring(openParen + 1, closeParen).trim();
-                if (valuesPart.isEmpty()) return "[ERROR] No insert value provided";
+                if (valuesPart.isEmpty()) return "[ERROR] No values provided";
                 String[] values = valuesPart.split(",");
                 List<String> rowData = new ArrayList<>();
                 for (String value : values) {
                     value = value.trim();
-                    // 去除字符串引号
+                    // Remove string quotes if present
                     if ((value.startsWith("'") && value.endsWith("'")) ||
                         (value.startsWith("\"") && value.endsWith("\""))) {
                         value = value.substring(1, value.length() - 1);
@@ -186,44 +193,36 @@ public class DBServer {
                 manager.saveTable(table);
                 return "[OK]";
             }
-            // select
+            // ----------------- SELECT Command -----------------
             else if (upperCmd.startsWith("SELECT")) {
-                // 格式：SELECT <columns> FROM tableName [WHERE condition]
+                // Format: SELECT <columns> FROM tableName [WHERE condition];
                 int indexFrom = upperCmd.indexOf("FROM");
-                if (indexFrom == -1) return "[ERROR] SELECT 语法错误";
-                // 提取 SELECT 部分的列定义
-                String columnsPart = trimmed.substring(6, indexFrom).trim();
-                // 将列名按逗号分割
+                if (indexFrom == -1) return "[ERROR] SELECT syntax error";
+                String columnsPart = trimmed.substring(6, indexFrom).trim(); // Extract between "SELECT" and "FROM"
                 List<String> selectedColumns = new ArrayList<>();
+                boolean selectAll = false;
                 if (columnsPart.equals("*")) {
-                    // 如果是 "*"，则选择所有列
-                    String tableName = trimmed.substring(indexFrom + 5).split("\\s+")[0].toLowerCase();
-                    if (tableName.isEmpty() || !tables.containsKey(tableName)) {
-                        // 表名为空或对应表不存在，返回空列表或报错
-                        selectedColumns.addAll(new ArrayList<>());
-                    } else {
-                        selectedColumns.addAll(tables.get(tableName).getColumns());
-                    }
-                    // 为了后续处理，直接设置标记
-                    selectedColumns.clear();
-                    selectedColumns.add("*");
+                    selectAll = true;
                 } else {
                     String[] cols = columnsPart.split(",");
                     for (String col : cols) {
                         selectedColumns.add(col.trim());
                     }
                 }
-                // 处理 FROM 部分：假设格式为 "FROM tableName"
-                String fromPart = trimmed.substring(indexFrom).trim();
-                String[] fromTokens = fromPart.split("\\s+");
-                if (fromTokens.length < 2) return "[ERROR] SELECT 命令格式错误";
-                String tableName = fromTokens[1].toLowerCase();
+                // Process FROM part: extract table name
+                String afterFrom = trimmed.substring(indexFrom + 4).trim();
+                String[] fromTokens = afterFrom.split("\\s+");
+                if (fromTokens.length < 1) return "[ERROR] SELECT command format error";
+                String tableName = fromTokens[0].toLowerCase();
                 Table table = tables.get(tableName);
-                if (table == null) return "[ERROR] 表不存在";
+                if (table == null) return "[ERROR] Table does not exist";
                 
-                // 如果 selectedColumns 不为 "*"，则需要验证每个列是否存在，并保存其在 table 中的索引
+                // Determine selected column indices and header
                 List<Integer> selectedIndices = new ArrayList<>();
-                if (!(selectedColumns.size() == 1 && selectedColumns.get(0).equals("*"))) {
+                List<String> header = new ArrayList<>();
+                if (selectAll) {
+                    header.addAll(table.getColumns());
+                } else {
                     for (String col : selectedColumns) {
                         int idx = -1;
                         for (int i = 0; i < table.getColumns().size(); i++) {
@@ -232,74 +231,63 @@ public class DBServer {
                                 break;
                             }
                         }
-                        if (idx == -1) return "[ERROR] SELECT 中的列 " + col + " 不存在";
+                        if (idx == -1) return "[ERROR] SELECT column " + col + " does not exist";
                         selectedIndices.add(idx);
-                    }
-                }
-                
-                // 检查是否存在 WHERE 子句（仅支持 == 和 !=）
-                boolean hasWhere = upperCmd.contains("WHERE");
-                String conditionColumn = null, conditionOp = null, conditionValue = null;
-                if (hasWhere) {
-                    int indexWhere = upperCmd.indexOf("WHERE");
-                    String conditionStr = trimmed.substring(indexWhere + 5).trim();
-                    if (conditionStr.contains("==")) {
-                        String[] condParts = conditionStr.split("==");
-                        if (condParts.length != 2) return "[ERROR] WHERE 条件格式错误";
-                        conditionColumn = condParts[0].trim();
-                        conditionValue = condParts[1].trim();
-                        if ((conditionValue.startsWith("'") && conditionValue.endsWith("'")) ||
-                            (conditionValue.startsWith("\"") && conditionValue.endsWith("\""))) {
-                            conditionValue = conditionValue.substring(1, conditionValue.length() - 1);
-                        }
-                        conditionOp = "==";
-                    } else if (conditionStr.contains("!=")) {
-                        String[] condParts = conditionStr.split("!=");
-                        if (condParts.length != 2) return "[ERROR] WHERE 条件格式错误";
-                        conditionColumn = condParts[0].trim();
-                        conditionValue = condParts[1].trim();
-                        if ((conditionValue.startsWith("'") && conditionValue.endsWith("'")) ||
-                            (conditionValue.startsWith("\"") && conditionValue.endsWith("\""))) {
-                            conditionValue = conditionValue.substring(1, conditionValue.length() - 1);
-                        }
-                        conditionOp = "!=";
-                    } else {
-                        return "[ERROR] WHERE 条件不支持";
-                    }
-                }
-                // 构造 SELECT 输出结果
-                StringBuilder result = new StringBuilder();
-                List<String> header = new ArrayList<>();
-                if (selectedColumns.size() == 1 && selectedColumns.get(0).equals("*")) {
-                    header.addAll(table.getColumns());
-                } else {
-                    for (int idx : selectedIndices) {
                         header.add(table.getColumns().get(idx));
                     }
                 }
+                
+                // Process WHERE clause (supporting compound conditions connected by AND)
+                List<Condition> conditions = new ArrayList<>();
+                if (upperCmd.contains("WHERE")) {
+                    int indexWhere = upperCmd.indexOf("WHERE");
+                    String whereClause = trimmed.substring(indexWhere + 5).trim();
+                    // Split conditions by "AND", case-insensitive
+                    String[] condStrings = whereClause.split("(?i)\\s+AND\\s+");
+                    for (String condStr : condStrings) {
+                        condStr = condStr.trim();
+                        // Remove surrounding parentheses if present
+                        if (condStr.startsWith("(") && condStr.endsWith(")")) {
+                            condStr = condStr.substring(1, condStr.length() - 1).trim();
+                        }
+                        Condition cond = parseCondition(condStr);
+                        if (cond == null) return "[ERROR] Invalid WHERE condition: " + condStr;
+                        // Verify that the attribute exists in the table
+                        boolean attrFound = false;
+                        for (String col : table.getColumns()) {
+                            if (col.equalsIgnoreCase(cond.attribute)) {
+                                attrFound = true;
+                                break;
+                            }
+                        }
+                        if (!attrFound) return "[ERROR] WHERE clause attribute does not exist: " + cond.attribute;
+                        conditions.add(cond);
+                    }
+                }
+                
+                // Build result by iterating through rows and applying all conditions
+                StringBuilder result = new StringBuilder();
                 result.append(String.join("\t", header)).append("\n");
-                // 对每一行进行过滤
                 for (List<String> row : table.getRows()) {
-                    boolean match = true;
-                    if (hasWhere) {
+                    boolean include = true;
+                    for (Condition cond : conditions) {
                         int colIndex = -1;
                         for (int i = 0; i < table.getColumns().size(); i++) {
-                            if (table.getColumns().get(i).equalsIgnoreCase(conditionColumn)) {
+                            if (table.getColumns().get(i).equalsIgnoreCase(cond.attribute)) {
                                 colIndex = i;
                                 break;
                             }
                         }
-                        if (colIndex == -1) return "[ERROR] WHERE 条件中的属性不存在";
+                        if (colIndex == -1) return "[ERROR] WHERE clause attribute does not exist: " + cond.attribute;
                         String cellValue = row.get(colIndex);
-                        if (conditionOp.equals("==")) {
-                            match = cellValue.equals(conditionValue);
-                        } else if (conditionOp.equals("!=")) {
-                            match = !cellValue.equals(conditionValue);
+                        if (!evaluateCondition(cellValue, cond)) {
+                            include = false;
+                            break;
                         }
                     }
-                    if (match) {
+                    if (include) {
                         List<String> rowOutput = new ArrayList<>();
-                        if (selectedColumns.size() == 1 && selectedColumns.get(0).equals("*")) {
+                        if (selectAll) {
                             rowOutput.addAll(row);
                         } else {
                             for (int idx : selectedIndices) {
@@ -311,21 +299,21 @@ public class DBServer {
                 }
                 return "[OK]\n" + result.toString();
             }
-            // update
+            // ----------------- UPDATE Command -----------------
             else if (upperCmd.startsWith("UPDATE")) {
-                // 格式：UPDATE tableName SET column = value WHERE column == value;
+                // Format: UPDATE tableName SET column = value WHERE column == value;
                 int indexWhere = upperCmd.indexOf("WHERE");
-                if (indexWhere < 0) return "[ERROR] Missing WHERE clause";
+                if (indexWhere < 0) return "[ERROR] Missing WHERE clause in UPDATE";
                 String beforeWhere = trimmed.substring(0, indexWhere).trim();
                 String[] tokens = beforeWhere.split("\\s+");
-                if (tokens.length < 4) return "[ERROR] UPDATE Command format error";
+                if (tokens.length < 4) return "[ERROR] Incorrect UPDATE command format";
                 String tableName = tokens[1].toLowerCase();
                 Table table = tables.get(tableName);
                 if (table == null) return "[ERROR] Table does not exist";
-                if (!tokens[2].equalsIgnoreCase("SET")) return "[ERROR] Missing SET keyword";
+                if (!tokens[2].equalsIgnoreCase("SET")) return "[ERROR] Missing SET keyword in UPDATE";
                 String setClause = trimmed.substring(trimmed.indexOf("SET") + 3, indexWhere).trim();
                 String[] setParts = setClause.split("=");
-                if (setParts.length != 2) return "[ERROR] SET clause is malformed";
+                if (setParts.length != 2) return "[ERROR] SET clause format error";
                 String updateColumn = setParts[0].trim();
                 String updateValue = setParts[1].trim();
                 if ((updateValue.startsWith("'") && updateValue.endsWith("'")) ||
@@ -336,7 +324,7 @@ public class DBServer {
                 String conditionColumn = null, conditionValue = null;
                 if (conditionClause.contains("==")) {
                     String[] condParts = conditionClause.split("==");
-                    if (condParts.length != 2) return "[ERROR] WHERE clause is malformed";
+                    if (condParts.length != 2) return "[ERROR] WHERE clause format error in UPDATE";
                     conditionColumn = condParts[0].trim();
                     conditionValue = condParts[1].trim();
                     if ((conditionValue.startsWith("'") && conditionValue.endsWith("'")) ||
@@ -344,7 +332,7 @@ public class DBServer {
                         conditionValue = conditionValue.substring(1, conditionValue.length() - 1);
                     }
                 } else {
-                    return "[ERROR] UPDATE WHERE Clause conditions are not supported";
+                    return "[ERROR] Unsupported condition in UPDATE WHERE clause";
                 }
                 int updateColIndex = -1, conditionColIndex = -1;
                 for (int i = 0; i < table.getColumns().size(); i++) {
@@ -352,8 +340,8 @@ public class DBServer {
                     if (col.equalsIgnoreCase(updateColumn)) updateColIndex = i;
                     if (col.equalsIgnoreCase(conditionColumn)) conditionColIndex = i;
                 }
-                if (updateColIndex == -1) return "[ERROR] The updated attribute does not exist";
-                if (conditionColIndex == -1) return "[ERROR] WHERE The attribute in the clause does not exist";
+                if (updateColIndex == -1) return "[ERROR] Update attribute does not exist";
+                if (conditionColIndex == -1) return "[ERROR] WHERE clause attribute does not exist in UPDATE";
                 for (List<String> row : table.getRows()) {
                     if (row.get(conditionColIndex).equals(conditionValue)) {
                         row.set(updateColIndex, updateValue);
@@ -362,70 +350,91 @@ public class DBServer {
                 manager.saveTable(table);
                 return "[OK]";
             }
-            // delete
+            // ----------------- DELETE Command -----------------
             else if (upperCmd.startsWith("DELETE")) {
-                // 格式：DELETE FROM tableName WHERE column == value;
+                // Format: DELETE FROM tableName WHERE condition;
                 int indexWhere = upperCmd.indexOf("WHERE");
-                if (indexWhere < 0) return "[ERROR] DELETE 命令缺少 WHERE 子句";
+                if (indexWhere < 0) return "[ERROR] DELETE command missing WHERE clause";
                 String beforeWhere = trimmed.substring(0, indexWhere).trim();
                 String[] tokens = beforeWhere.split("\\s+");
-                if (tokens.length != 3) return "[ERROR] DELETE 命令格式错误";
+                if (tokens.length != 3) return "[ERROR] DELETE command format error";
                 if (!tokens[0].equalsIgnoreCase("DELETE") || !tokens[1].equalsIgnoreCase("FROM"))
-                    return "[ERROR] DELETE 命令语法错误";
+                    return "[ERROR] DELETE command syntax error";
                 String tableName = tokens[2].toLowerCase();
                 Table table = tables.get(tableName);
-                if (table == null) return "[ERROR] 表不存在";
-                String conditionClause = trimmed.substring(indexWhere + 5).trim();
-                String conditionColumn = null, conditionValue = null;
-                if (conditionClause.contains("==")) {
-                    String[] condParts = conditionClause.split("==");
-                    if (condParts.length != 2) return "[ERROR] WHERE 子句格式错误";
-                    conditionColumn = condParts[0].trim();
-                    conditionValue = condParts[1].trim();
-                    if ((conditionValue.startsWith("'") && conditionValue.endsWith("'")) ||
-                        (conditionValue.startsWith("\"") && conditionValue.endsWith("\""))) {
-                        conditionValue = conditionValue.substring(1, conditionValue.length() - 1);
+                if (table == null) return "[ERROR] Table does not exist";
+                
+                String whereClause = trimmed.substring(indexWhere + 5).trim();
+                // Split conditions by "AND" (case-insensitive)
+                String[] condStrings = whereClause.split("(?i)\\s+AND\\s+");
+                List<Condition> conditions = new ArrayList<>();
+                for (String condStr : condStrings) {
+                    condStr = condStr.trim();
+                    // Remove enclosing parentheses if present
+                    if (condStr.startsWith("(") && condStr.endsWith(")")) {
+                        condStr = condStr.substring(1, condStr.length() - 1).trim();
                     }
-                } else {
-                    return "[ERROR] DELETE 命令的条件不支持";
-                }
-                int conditionColIndex = -1;
-                for (int i = 0; i < table.getColumns().size(); i++) {
-                    if (table.getColumns().get(i).equalsIgnoreCase(conditionColumn)) {
-                        conditionColIndex = i;
-                        break;
+                    Condition cond = parseCondition(condStr);
+                    if (cond == null) return "[ERROR] Invalid WHERE condition: " + condStr;
+                    // Check if the attribute exists in the table
+                    boolean attrFound = false;
+                    for (String col : table.getColumns()) {
+                        if (col.equalsIgnoreCase(cond.attribute)) {
+                            attrFound = true;
+                            break;
+                        }
                     }
+                    if (!attrFound) return "[ERROR] WHERE clause attribute does not exist: " + cond.attribute;
+                    conditions.add(cond);
                 }
-                if (conditionColIndex == -1) return "[ERROR] WHERE 子句中的属性不存在";
+                
+                // Iterate through rows in reverse and remove those that satisfy all conditions.
                 for (int i = table.getRows().size() - 1; i >= 0; i--) {
                     List<String> row = table.getRows().get(i);
-                    if (row.get(conditionColIndex).equals(conditionValue)) {
+                    boolean match = true;
+                    for (Condition cond : conditions) {
+                        int colIndex = -1;
+                        for (int j = 0; j < table.getColumns().size(); j++) {
+                            if (table.getColumns().get(j).equalsIgnoreCase(cond.attribute)) {
+                                colIndex = j;
+                                break;
+                            }
+                        }
+                        if (colIndex == -1) {
+                            match = false;
+                            break;
+                        }
+                        String cellValue = row.get(colIndex);
+                        if (!evaluateCondition(cellValue, cond)) {
+                            match = false;
+                            break;
+                        }
+                    }
+                    if (match) {
                         table.getRows().remove(i);
                     }
                 }
                 manager.saveTable(table);
                 return "[OK]";
             }
-            // alter table
+            // ----------------- ALTER TABLE Command -----------------
             else if (upperCmd.startsWith("ALTER")) {
-                // 格式：ALTER TABLE tableName ADD columnName  或  ALTER TABLE tableName DROP columnName;
+                // Format: ALTER TABLE tableName ADD columnName  OR  ALTER TABLE tableName DROP columnName;
                 String[] tokens = trimmed.split("\\s+");
-                if (tokens.length != 5) return "[ERROR] ALTER TABLE 命令格式错误";
-                if (!tokens[1].equalsIgnoreCase("TABLE")) return "[ERROR] 缺少 TABLE 关键字";
+                if (tokens.length != 5) return "[ERROR] Incorrect ALTER TABLE command format";
+                if (!tokens[1].equalsIgnoreCase("TABLE")) return "[ERROR] Missing TABLE keyword in ALTER TABLE";
                 String tableName = tokens[2].toLowerCase();
                 Table table = tables.get(tableName);
-                if (table == null) return "[ERROR] 表不存在";
+                if (table == null) return "[ERROR] Table does not exist";
                 String operation = tokens[3].toUpperCase();
                 String columnName = tokens[4];
                 if (operation.equals("ADD")) {
-                    // 检查是否已有该列
                     for (String col : table.getColumns()) {
                         if (col.equalsIgnoreCase(columnName)) {
-                            return "[ERROR] 列已存在";
+                            return "[ERROR] Column already exists";
                         }
                     }
                     table.getColumns().add(columnName);
-                    // 为所有记录增加空字符串
                     for (List<String> row : table.getRows()) {
                         row.add("");
                     }
@@ -433,7 +442,7 @@ public class DBServer {
                     return "[OK]";
                 } else if (operation.equals("DROP")) {
                     if (columnName.equalsIgnoreCase("id")) {
-                        return "[ERROR] 无法删除主键列";
+                        return "[ERROR] Cannot drop primary key column";
                     }
                     int dropIndex = -1;
                     for (int i = 0; i < table.getColumns().size(); i++) {
@@ -442,7 +451,7 @@ public class DBServer {
                             break;
                         }
                     }
-                    if (dropIndex == -1) return "[ERROR] 列不存在";
+                    if (dropIndex == -1) return "[ERROR] Column does not exist";
                     table.getColumns().remove(dropIndex);
                     for (List<String> row : table.getRows()) {
                         row.remove(dropIndex);
@@ -450,18 +459,18 @@ public class DBServer {
                     manager.saveTable(table);
                     return "[OK]";
                 } else {
-                    return "[ERROR] ALTER TABLE 操作不支持";
+                    return "[ERROR] ALTER TABLE operation not supported";
                 }
             }
-            // drop
+            // ----------------- DROP Command -----------------
             else if (upperCmd.startsWith("DROP")) {
-                // 格式：DROP TABLE tableName  或  DROP DATABASE databaseName;
+                // Format: DROP TABLE tableName OR DROP DATABASE databaseName;
                 String[] tokens = trimmed.split("\\s+");
-                if (tokens.length != 3) return "[ERROR] DROP 命令格式错误";
+                if (tokens.length != 3) return "[ERROR] Incorrect DROP command format";
                 String dropType = tokens[1].toUpperCase();
                 String targetName = tokens[2].toLowerCase();
                 if (dropType.equals("TABLE")) {
-                    if (!tables.containsKey(targetName)) return "[ERROR] 表不存在";
+                    if (!tables.containsKey(targetName)) return "[ERROR] Table does not exist";
                     tables.remove(targetName);
                     File file = new File(manager.getStorageFolderPath(), targetName + ".tab");
                     if (file.exists()) {
@@ -470,7 +479,7 @@ public class DBServer {
                     return "[OK]";
                 } else if (dropType.equals("DATABASE")) {
                     File dbDir = new File(manager.getStorageFolderPath(), targetName);
-                    if (!dbDir.exists()) return "[ERROR] 数据库不存在";
+                    if (!dbDir.exists()) return "[ERROR] Database does not exist";
                     for (File f : dbDir.listFiles()) {
                         f.delete();
                     }
@@ -481,21 +490,21 @@ public class DBServer {
                     }
                     return "[OK]";
                 } else {
-                    return "[ERROR] DROP 操作不支持";
+                    return "[ERROR] DROP operation not supported";
                 }
             }
-            // join
+            // ----------------- JOIN Command -----------------
             else if (upperCmd.startsWith("JOIN")) {
-                // 格式：JOIN tableOne AND tableTwo ON attributeFromTableOne AND attributeFromTableTwo;
+                // Format: JOIN tableOne AND tableTwo ON attributeFromTableOne AND attributeFromTableTwo;
                 String[] tokens = trimmed.split("\\s+");
-                if (tokens.length != 8) return "[ERROR] JOIN 命令格式错误";
+                if (tokens.length != 8) return "[ERROR] Incorrect JOIN command format";
                 String tableOneName = tokens[1].toLowerCase();
                 String tableTwoName = tokens[3].toLowerCase();
                 String attrOne = tokens[5];
                 String attrTwo = tokens[7];
                 Table tableOne = tables.get(tableOneName);
                 Table tableTwo = tables.get(tableTwoName);
-                if (tableOne == null || tableTwo == null) return "[ERROR] 一个或多个表不存在";
+                if (tableOne == null || tableTwo == null) return "[ERROR] One or both tables do not exist";
                 int indexOne = -1, indexTwo = -1;
                 for (int i = 0; i < tableOne.getColumns().size(); i++) {
                     if (tableOne.getColumns().get(i).equalsIgnoreCase(attrOne)) {
@@ -509,17 +518,17 @@ public class DBServer {
                         break;
                     }
                 }
-                if (indexOne == -1) return "[ERROR] 表 " + tableOneName + " 中不存在属性 " + attrOne;
-                if (indexTwo == -1) return "[ERROR] 表 " + tableTwoName + " 中不存在属性 " + attrTwo;
+                if (indexOne == -1) return "[ERROR] Table " + tableOneName + " does not have attribute " + attrOne;
+                if (indexTwo == -1) return "[ERROR] Table " + tableTwoName + " does not have attribute " + attrTwo;
                 StringBuilder joinResult = new StringBuilder();
                 List<String> joinColumns = new ArrayList<>();
-                // 添加 tableOne 的列（排除 id 和 attrOne）
+                // Add columns from tableOne (excluding id and attrOne)
                 for (int i = 0; i < tableOne.getColumns().size(); i++) {
                     String col = tableOne.getColumns().get(i);
                     if (i == 0 || col.equalsIgnoreCase(attrOne)) continue;
                     joinColumns.add(tableOneName + "." + col);
                 }
-                // 添加 tableTwo 的列（排除 id 和 attrTwo）
+                // Add columns from tableTwo (excluding id and attrTwo)
                 for (int i = 0; i < tableTwo.getColumns().size(); i++) {
                     String col = tableTwo.getColumns().get(i);
                     if (i == 0 || col.equalsIgnoreCase(attrTwo)) continue;
@@ -547,15 +556,15 @@ public class DBServer {
                 return "[OK]\n" + joinResult.toString();
             }
             else {
-                return "[ERROR] 未知命令";
+                return "[ERROR] Unknown command";
             }
-        } catch (IOException e){
-            return "IO exception: " + e.getMessage();
+        } catch (IOException e) {
+            return "[ERROR] IO Exception: " + e.getMessage();
         }
     }
     
+    
     private boolean isReservedKeyword(String word) {
-        // 定义一组常见的 SQL 保留关键字
         String[] reserved = {"SELECT", "INSERT", "UPDATE", "DELETE", "FROM", "WHERE",
                              "JOIN", "CREATE", "DATABASE", "TABLE", "DROP", "ALTER", 
                              "USE", "AND", "OR", "TRUE", "FALSE", "LIKE", "NOT"};
@@ -565,7 +574,70 @@ public class DBServer {
             }
         }
         return false;
-    }    
+    }
+
+    // Helper class to represent a simple condition in the WHERE clause.
+    private static class Condition {
+        String attribute;
+        String comparator;
+        String value;
+    }
+
+    // Helper method to parse a single condition string.
+    private Condition parseCondition(String condStr) {
+        // Include "LIKE" among the comparators. Check longer comparators first.
+        String[] comparators = {"==", "!=", ">=", "<=", "LIKE", ">", "<"};
+        for (String comp : comparators) {
+            // For "LIKE", allow it to be surrounded by spaces or not.
+            int idx = condStr.indexOf(comp);
+            if (idx != -1) {
+                Condition cond = new Condition();
+                cond.attribute = condStr.substring(0, idx).trim();
+                cond.comparator = comp.trim();  // For "LIKE", this will be "LIKE"
+                cond.value = condStr.substring(idx + comp.length()).trim();
+                // Remove quotes from the value if present
+                if ((cond.value.startsWith("'") && cond.value.endsWith("'")) ||
+                    (cond.value.startsWith("\"") && cond.value.endsWith("\""))) {
+                    cond.value = cond.value.substring(1, cond.value.length() - 1);
+                }
+                return cond;
+            }
+        }
+        return null; // unsupported condition
+    }
+
+    // Helper method to evaluate a single condition against a cell value.
+    private boolean evaluateCondition(String cellValue, Condition cond) {
+        try {
+            // Try numeric comparison if possible.
+            double cellNum = Double.parseDouble(cellValue);
+            double condNum = Double.parseDouble(cond.value);
+            switch (cond.comparator) {
+                case "==": return cellNum == condNum;
+                case "!=": return cellNum != condNum;
+                case ">": return cellNum > condNum;
+                case "<": return cellNum < condNum;
+                case ">=": return cellNum >= condNum;
+                case "<=": return cellNum <= condNum;
+                // "LIKE" is not numeric; fall through.
+                default: break;
+            }
+        } catch (NumberFormatException e) {
+            // Not numbers, fallback to string comparison.
+        }
+        // For string comparisons.
+        switch (cond.comparator) {
+            case "==": return cellValue.equals(cond.value);
+            case "!=": return !cellValue.equals(cond.value);
+            case ">": return cellValue.compareTo(cond.value) > 0;
+            case "<": return cellValue.compareTo(cond.value) < 0;
+            case ">=": return cellValue.compareTo(cond.value) >= 0;
+            case "<=": return cellValue.compareTo(cond.value) <= 0;
+            case "LIKE": return cellValue.contains(cond.value);
+            default: return false;
+        }
+    }
+
 
     //  === Methods below handle networking aspects of the project - you will not need to change these ! ===
 
